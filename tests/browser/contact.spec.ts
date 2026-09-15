@@ -83,7 +83,7 @@ for (const path of ['/', '/mutual-funds/']) {
       await expect(page.getByRole('status')).toHaveText(
         'Thank you. Your message has been submitted.',
       );
-      for (const field of await page.locator('input, textarea').all())
+      for (const field of await page.locator('form input, form textarea').all())
         await expect(field).toHaveValue('');
       expect(
         await page.evaluate(() => ({

@@ -73,6 +73,7 @@ export async function getOpenings(): Promise<Opening[]> {
   const openings: Opening[] = [];
   for (let page = 1; ; page++) {
     const query = new URLSearchParams(fields);
+    query.set('filters[job_status][$eq]', 'Open');
     query.set('sort', 'title:asc');
     query.set('pagination[page]', String(page));
     query.set('pagination[pageSize]', '100');
@@ -90,7 +91,11 @@ export async function getOpenings(): Promise<Opening[]> {
         'The openings service returned an unexpected response. Please try again.',
       );
     }
-    openings.push(...result.data.map(checkOpening));
+    openings.push(
+      ...result.data
+        .map(checkOpening)
+        .filter((opening: Opening) => opening.job_status === 'Open'),
+    );
     if (page >= pagination.pageCount) break;
     if (!result.data.length)
       throw new Error(

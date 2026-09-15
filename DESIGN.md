@@ -75,8 +75,12 @@ a breakpoint in the token file updates both utilities and section media queries.
 Brand blue owns actions, section headings, the About band, Investor tab band and footer. Ink provides
 body contrast and the hero’s restrained text gradient. The pale app surface and
 metric icon tiles are secondary roles. White remains the main page
-surface. Dark mode is not part of the source. Forced-colors mode must retain
-readable text and native system controls.
+surface. The accessibility toolbar mirrors staging's three contrast treatments:
+High Contrast boosts contrast with a white/black/blue palette, Dark Mode uses
+the source inversion treatment while restoring media, and Inverted Colors uses
+black/yellow/cyan with dark form controls. The toolbar remains readable instead
+of reproducing staging's inverted-mode heading defect. Forced-colors mode must
+retain readable text and native system controls.
 
 ## Typography
 
@@ -106,7 +110,9 @@ colored bands. Do not stack section-specific outer margins/padding on top of tha
 rhythm. Other internal spacing (for example the About heading-to-band distance)
 also remains unchanged. Header actions
 have dedicated compact height/padding tokens, with a larger minimum on coarse
-pointers; other calls to action keep their existing dimensions.
+pointers; other calls to action keep their existing dimensions. The shared header
+uses its own full-width `--header-max` token so wide screens retain only the normal
+page gutter instead of inheriting the narrower content container's outer margins.
 
 Secondary routes compose sections from their own folders. `content.css` supplies
 patterns scoped to `.content-page`; its independent content-heading and hero tokens
@@ -163,6 +169,25 @@ separate rounded, touch-sized geometry.
 Actions have hover and visible keyboard focus states. White-on-blue sections
 use white focus outlines. Unconfigured/no-JavaScript submission remains unavailable
 with nearby explanatory text. Sending and feedback states reflect actual requests.
+
+### Accessibility toolbar
+
+The shared bottom-right accessibility toolbar follows the staging control set
+without importing its runtime. Its 56px blue trigger opens a 340px, internally
+scrolling non-modal panel that fits narrow viewports. The panel owns focus while
+open, closes from its trigger, close button, Escape or an outside press, and
+restores focus for keyboard dismissal. It sits above the header/mobile menu but
+below the Home Investor Alert dialog; outside dismissal prevents those controls
+from overlapping.
+
+Font scaling changes the root rem scale from 70% to 150% without rewriting
+individual component sizes. Contrast, OpenDyslexic, missing-alt highlighting and
+enhanced keyboard focus are root states backed by the accessibility tokens in
+`tokens.css`. Text to speech reads a selection or visible text from `main` through
+the browser speech API and exposes voice, rate, pause/resume and stop controls.
+Only these preferences are stored locally; the panel opens closed and Reset all
+settings removes the stored entry. The toolbar is hidden without JavaScript and
+does not make accessibility or compliance a user opt-in.
 
 ### Buttons and actions
 
@@ -311,9 +336,10 @@ alone. No new hero imagery, stock photos, benefits claims or animations are adde
 
 `OpeningList` owns list loading and empty/error feedback; `JobDetails` owns read-only
 description rendering and tabs; `ApplicationForm` owns its explicit fields and
-submission code. They share only typed opening reads/configuration. All published
-statuses are shown; Closed/Filled jobs retain details with Apply disabled and an
-explanation. The form is available only after the script guard and Open job are ready.
+submission code. They share only typed opening reads/configuration. The Careers
+listing shows only Open positions. Closed/Filled job details remain unavailable for
+applications when reached from an old or direct URL. The form is available only after
+the script guard and Open job are ready.
 Tabs use native buttons with selected state, roving focus, arrow/Home/End keys and
 hidden inactive panels. Without JavaScript, the generic detail explanation and
 disabled form remain readable. Missing/configuration/error states keep contact links.
@@ -326,7 +352,12 @@ Unlike staging, the approved schema requires LinkedIn and allows only PDFs at th
 owner's smaller size limit; no unsupported candidate Location field is added.
 
 Selection is local. Submit validates, rechecks the role, uploads the PDF and creates
-the candidate. Status names these phases; only confirmed creation clears values.
+the candidate. After local field validation and before any request, an accessible
+native modal gives a short company description and requires the applicant to type
+“stock broking company”. Cancel, Escape and backdrop dismissal return focus to the
+application button without sending anything; only the accepted phrase continues
+to the opening check and upload. Status names these phases; only confirmed creation
+clears values.
 Manual retry with the same File reuses its known upload ID. There is no optimistic
 success, automatic retry, resume preview/download link, persistent draft, toast or
 leave-page warning. Uploads can remain unattached after failure; accepted files are

@@ -114,7 +114,7 @@ retention rules.
 | Close Account | `POST /api/close-account-requests`                                                                                                                                     | Four required fields; creates a request, not confirmation of closure.                 |
 | Raise Ticket  | `POST /api/complaints` and optional `POST /api/private-upload`                                                                                                         | Seven complaint fields and one optional attachment.                                   |
 | Downloads     | `GET /api/software-categories`, `GET /api/softwares`                                                                                                                   | Fetches all pages, then filters locally.                                              |
-| Careers       | `GET /api/openings`, `POST /api/private-upload`, `POST /api/candidates`                                                                                                | Shows Open, Closed and Filled jobs; only Open jobs accept PDF applications.           |
+| Careers       | `GET /api/openings`, `POST /api/private-upload`, `POST /api/candidates`                                                                                                | Lists only Open jobs and accepts PDF applications for those positions.                |
 | Blog          | `GET /api/blogs` and one public document read                                                                                                                          | Lists published posts and renders sanitized Markdown.                                 |
 | Investors     | `GET /api/overviews`, `/api/shareholder-relation-categories`, `/api/shareholder-relations`, `/api/financial-reports`, `/api/disclosure-2015s`, `/api/client-relations` | Loads published records in the browser and exposes only safe HTTP(S) files and links. |
 
@@ -175,11 +175,20 @@ state-management library, or new backend integration without approval.
 - Edit navigation and external destinations in `src/data/nav.ts` and `site.ts`.
 - The hamburger menu becomes a full-page panel below the header on phone widths;
   its markup and behavior remain owned by `src/components/shared/Header.astro`.
+- The shared accessibility toolbar is owned by
+  `src/components/shared/AccessibilityToolbar.astro`. It stores only display and
+  reading preferences under `a11y-plugin-prefs`; Reset all settings removes them.
 - Edit layout or page-specific behavior in the named component under `src/components/`.
 - Change typography, spacing, colors, breakpoints, shadows and motion in `tokens.css`.
 - Replace local images under `src/assets/images/` and keep alt text and dimensions accurate.
 - Replace `src/assets/docs/corporate-presentation_.pdf` to update the static presentation.
 - Keep browser validation, timeout, safe-URL, sanitization and no-JavaScript fallbacks intact.
+
+The accessibility toolbar provides text scaling, four contrast modes, a locally
+bundled OpenDyslexic font, browser text-to-speech controls, missing-alt auditing
+and enhanced focus visibility on all interactive routes. The toolbar is hidden
+without JavaScript and does not replace semantic HTML, screen-reader testing or
+the release accessibility review.
 
 The full-resolution account-closing flowchart and its accessible transcript must
 be updated together. About Us timeline artwork and text equivalents must also

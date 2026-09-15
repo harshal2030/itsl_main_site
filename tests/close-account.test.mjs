@@ -56,9 +56,10 @@ test('close-account starts disabled with exactly the four Strapi fields', () => 
   assert.equal(attr(form, 'action'), undefined);
   assert.notEqual(attr(form, 'novalidate'), undefined);
 
-  const fieldset = nodes('fieldset')[0];
+  const formNodes = (tag) => all(form, (node) => node.tagName === tag);
+  const fieldset = formNodes('fieldset')[0];
   assert.notEqual(attr(fieldset, 'disabled'), undefined);
-  const inputs = nodes('input');
+  const inputs = formNodes('input');
   assert.deepEqual(
     inputs.map((input) => attr(input, 'name')),
     ['bo_id', 'ucc', 'email', 'mobile_no'],
@@ -67,7 +68,9 @@ test('close-account starts disabled with exactly the four Strapi fields', () => 
     assert.notEqual(attr(input, 'required'), undefined);
     assert.equal(attr(input, 'form'), undefined);
     assert.ok(
-      nodes('label').some((label) => attr(label, 'for') === attr(input, 'id')),
+      formNodes('label').some(
+        (label) => attr(label, 'for') === attr(input, 'id'),
+      ),
     );
   }
   assert.equal(attr(inputs[0], 'minlength'), undefined);

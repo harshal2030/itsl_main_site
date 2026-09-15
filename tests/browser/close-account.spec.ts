@@ -91,7 +91,7 @@ test.describe('Close account request', () => {
     await expect(page.getByRole('status')).toContainText(
       'does not confirm that your account is closed',
     );
-    for (const input of await page.locator('input').all())
+    for (const input of await page.locator('form input').all())
       await expect(input).toHaveValue('');
     expect(
       await page.evaluate(() => ({

@@ -24,6 +24,120 @@ indexable and self-canonical and is included in `public/sitemap.xml`.
 | Design checks             | Strict frontend audit completed with zero findings; token ownership and `DESIGN.md` reviewed. |
 | Reference and visual      | Staging structure inspected; local 1280px and 320px captures reviewed.                        |
 | Safety                    | No deployment, CMS request, CMS mutation or live submission was performed.                    |
+## Accessibility toolbar integration — 15 September 2026
+
+The shared layout now renders one locally maintained accessibility toolbar on
+all 17 interactive routes. The 404 and `/investors/` redirect shells remain
+unchanged. The toolbar provides bounded text scaling, four exclusive contrast
+modes, a local OpenDyslexic font, browser text-to-speech controls, missing-alt
+highlighting, enhanced keyboard focus and reset-all behavior. Its panel is
+non-modal, keyboard-contained while open, dismissed by Escape or an outside
+pointer action, and restores trigger focus on keyboard dismissal. It stays
+hidden without JavaScript.
+
+Only the validated `a11y-plugin-prefs` preference object is persisted. Visual
+preferences are restored from guarded storage before paint; the panel starts
+closed after reload or navigation, Reset All removes the entry, and speech is
+cancelled on page exit. Empty `alt=""` remains valid while genuinely missing
+attributes, including on dynamically inserted images, can be highlighted.
+The three non-default contrast modes were compared directly with staging: High
+Contrast uses its 1.5× page and 1.2× image filters with white/black/blue colors,
+Dark Mode uses the same inversion and media-restoration filters, and Inverted
+Colors uses black/yellow/cyan with the same dark control surfaces. The local
+toolbar intentionally keeps readable section labels in Inverted Colors instead
+of reproducing staging's white-on-white label defect.
+
+| Check                     | Result                                                                                  |
+| ------------------------- | --------------------------------------------------------------------------------------- |
+| Formatting                | `npm run format:check` passed.                                                          |
+| Astro/TypeScript          | `npm run check`: 107 files, zero errors, warnings or hints.                             |
+| Static output/build       | `PUBLIC_STRAPI_URL= npm test`: 10/10 test files passed; all nineteen outputs built.     |
+| Toolbar browser coverage  | 10/10 focused mocked Chromium tests passed inside the full production suite.            |
+| Production browser tests  | `npm run test:browser`: 232/232 mocked Chromium tests passed.                           |
+| Development layout/assets | `npm run test:dev`: 37/37 responsive and local-asset checks passed.                     |
+| Frontend static audit     | Strict audit completed with zero findings.                                              |
+| Manual browser review     | Keyboard and visual checks passed at 1280×800 and 320×800, including focus restoration. |
+| Safety                    | No live CMS request, form submission, deployment or external runtime was used.          |
+
+The static test command was run with `PUBLIC_STRAPI_URL` blank because the
+checkout's ignored `.env.local` enables a local CMS while those tests explicitly
+verify the unconfigured fallback. Browser suites use the existing mocked
+`http://strapi.test` boundary. This feature remains an optional visitor aid; it
+does not represent a WCAG certification or completion of the broader release
+accessibility review.
+
+## Wide-screen header gutters — 12 September 2026
+
+The shared header now uses its own token-owned full-width maximum instead of the
+site's narrower `90rem` content maximum. At the reported wide Careers viewport,
+this removes the extra outer margins while preserving the existing 40px desktop
+page gutter around the logo and right-side actions. Tablet and phone gutters,
+navigation behavior, action sizing and the full-page phone menu are unchanged.
+
+| Check                     | Result                                                                            |
+| ------------------------- | --------------------------------------------------------------------------------- |
+| Formatting                | `npm run format:check` passed.                                                    |
+| Astro/TypeScript          | `npm run check`: 104 files, zero errors, warnings or hints.                       |
+| Static output/build       | `PUBLIC_STRAPI_URL= npm test`: 9/9 test files passed; all nineteen outputs built. |
+| Focused header tests      | 4/4 passed, including exact 1919px-wide gutter geometry.                          |
+| Production browser tests  | `npm run test:browser`: 222/222 mocked Chromium tests passed.                     |
+| Development layout/assets | `npm run test:dev`: 37/37 responsive and local-asset checks passed.               |
+| Design checks             | DESIGN.md lint and the strict frontend audit completed with zero warnings.        |
+| Live visual review        | The updated wide Careers header was inspected in the local browser.               |
+| Safety                    | No content, Strapi, domain or deployment change was performed.                    |
+
+## Careers Open-only listing — 12 September 2026
+
+The Careers listing now requests only openings whose `job_status` is `Open` and
+also filters every validated response before rendering. This second check keeps
+Closed or Filled records off the page even if a backend or test response ignores
+the requested filter. Open positions retain their alphabetical ordering, tags,
+status and local job-detail links. When none are available, the page reports
+“No open positions right now.”
+
+Closed and Filled job-detail records remain guarded when reached through an old
+or direct URL: their details can still explain that applications are unavailable,
+and the application form stays disabled. This listing change makes no Strapi
+schema, permission or record change.
+
+| Check                     | Result                                                                            |
+| ------------------------- | --------------------------------------------------------------------------------- |
+| Formatting                | `npm run format:check` passed.                                                    |
+| Astro/TypeScript          | `npm run check`: 104 files, zero errors, warnings or hints.                       |
+| Static output/build       | `PUBLIC_STRAPI_URL= npm test`: 9/9 test files passed; all nineteen outputs built. |
+| Focused Careers tests     | 65/65 mocked Chromium tests passed.                                               |
+| Production browser tests  | `npm run test:browser`: 221/221 mocked Chromium tests passed.                     |
+| Development layout/assets | `npm run test:dev`: 37/37 responsive and local-asset checks passed.               |
+| Frontend static audit     | Strict audit completed with zero findings.                                        |
+| Live local review         | The configured Careers page displayed one Open position and no non-open roles.    |
+| Safety                    | No application, upload, Strapi change or deployment was performed.                |
+
+## Careers company-description check — 12 September 2026
+
+Submitting a valid Careers application now opens a native modal before any
+network request. It briefly describes IndoThai Securities and requires the
+applicant to type “stock broking company”. The comparison ignores capitalization
+and repeated or surrounding spaces, but rejects other wording with an inline
+error. Only “Confirm and submit” continues to the existing opening recheck,
+private resume upload and Candidate creation flow.
+
+Cancel, Escape and backdrop dismissal close the modal without sending anything
+and restore focus to Submit application. Initial focus moves to the answer field;
+Tab and Shift+Tab remain inside the modal. The page is scroll-locked while it is
+open, and the heading, input and both actions remain reachable at 760×926 and
+320×600. Existing field/PDF validation still runs before the modal, while the PDF
+signature and job-status checks remain before upload.
+
+| Check                     | Result                                                                                |
+| ------------------------- | ------------------------------------------------------------------------------------- |
+| Formatting                | `npm run format:check` passed.                                                        |
+| Astro/TypeScript          | `npm run check`: 104 files, zero errors, warnings or hints.                           |
+| Static output/build       | `PUBLIC_STRAPI_URL= npm test`: 9/9 test files passed; all nineteen outputs built.     |
+| Production browser tests  | `npm run test:browser`: 221/221 mocked Chromium tests passed.                         |
+| Development layout/assets | `npm run test:dev`: 37/37 responsive and local-asset checks passed.                   |
+| Frontend static audit     | Strict audit completed with zero findings.                                            |
+| Visual review             | Open modal screenshots at 760×926 and 320×600 were inspected after responsive checks. |
+| Safety                    | No live resume upload, Candidate creation, Strapi change or deployment was performed. |
 
 ## Production SEO remediation — 12 September 2026
 
@@ -1048,8 +1162,8 @@ figures, source wording, destinations and reduced-motion behavior are preserved.
 Other intentional differences: semantic heading hierarchy; explicit contact labels and
 preview status; visible carousel controls; no entrance-animation hiding; safer
 tablet/phone reflow; complete regulatory copy on mobile; visible focus states;
-and the deferred accessibility toolbar. Source copy/link anomalies are listed in
-README and are not silently corrected.
+and the locally implemented accessibility toolbar. Source copy/link anomalies are
+listed in README and are not silently corrected.
 
 Generated comparison files are ignored artifacts under `artifacts/reference/`
 and `artifacts/local/`; browser-test screenshots/traces are in `test-results/`.
@@ -1108,7 +1222,8 @@ Follow-up checks:
   indexing activation, redirects or deployment has been configured.
 - The contact client and local endpoint smoke test are implemented as recorded
   above; production contact security/privacy configuration is not included.
-  The floating accessibility toolbar/compliance decision remains deferred.
+- The floating accessibility toolbar is implemented and locally tested. It is an
+  optional visitor aid, not evidence of site-wide accessibility certification.
 - External destination values were checked against source markup; authenticated
   account, payment/transfer, IPO and trading workflows were not exercised.
 - Automated browser coverage is Chromium. Safari, Firefox, physical touch devices,

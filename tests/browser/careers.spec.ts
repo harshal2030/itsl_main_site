@@ -103,6 +103,21 @@ async function fillApplication(page: Page) {
 const status = (page: Page) => page.locator('[data-application-status]');
 const submit = (page: Page) =>
   page.getByRole('button', { name: 'Submit application' });
+const companyCheck = (page: Page) =>
+  page.getByRole('dialog', { name: 'Before you submit' });
+async function confirmCompanyCheck(
+  page: Page,
+  answer = 'stock broking company',
+) {
+  await companyCheck(page).getByLabel('Company description').fill(answer);
+  await companyCheck(page)
+    .getByRole('button', { name: 'Confirm and submit' })
+    .click();
+}
+async function startSubmission(page: Page, answer?: string) {
+  await submit(page).click();
+  await confirmCompanyCheck(page, answer);
+}
 
 test('job detail avoids a poor first-paint layout shift', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
@@ -129,24 +144,21 @@ test('job detail avoids a poor first-paint layout shift', async ({ page }) => {
   expect(cls).toBeLessThanOrEqual(0.1);
 });
 
-test('lists all statuses, tags and sorted jobs with shareable local links', async ({
+test('lists only open positions with tags and shareable local links', async ({
   page,
 }) => {
   const requests = await mockCareers(page);
   await page.goto('/careers/');
-  await expect(page.locator('.opening-card h3')).toHaveText([
-    'Analyst',
-    'Operations',
-    job.title,
-  ]);
+  await expect(page.locator('.opening-card h3')).toHaveText([job.title]);
   await expect(page.locator('.opening-card [data-job-status]')).toHaveText([
-    'Closed',
-    'Filled',
     'Open',
   ]);
   await expect(
-    page.locator('.opening-card').last().locator('[data-tags] li'),
+    page.locator('.opening-card').locator('[data-tags] li'),
   ).toHaveText(['Rust', 'Golang', 'Linux']);
+  await expect(page.locator('[data-opening-status]')).toHaveText(
+    '1 open position.',
+  );
   await page
     .getByRole('link', { name: /Software Engineer Intern Open/ })
     .click();
@@ -163,9 +175,15 @@ test('lists all statuses, tags and sorted jobs with shareable local links', asyn
         !request.url().includes('candidates'),
     ),
   ).toBe(true);
+  const listRequest = requests.find(
+    (request) => new URL(request.url()).pathname === '/api/openings',
+  );
+  expect(
+    new URL(listRequest!.url()).searchParams.get('filters[job_status][$eq]'),
+  ).toBe('Open');
 });
 
-test('follows listing pagination, sorts the full list and handles genuine empty results', async ({
+test('follows listing pagination, excludes non-open results and handles an empty open list', async ({
   page,
 }) => {
   await mockCareers(page);
@@ -183,10 +201,7 @@ test('follows listing pagination, sorts the full list and handles genuine empty 
     });
   });
   await page.goto('/careers/');
-  await expect(page.locator('.opening-card h3')).toHaveText([
-    'Analyst',
-    job.title,
-  ]);
+  await expect(page.locator('.opening-card h3')).toHaveText([job.title]);
   await page.route(`${api}/openings?**`, (route) =>
     route.fulfill({
       json: { data: [], meta: { pagination: { page: 1, pageCount: 0 } } },
@@ -194,7 +209,7 @@ test('follows listing pagination, sorts the full list and handles genuine empty 
   );
   await page.reload();
   await expect(page.locator('[data-opening-status]')).toHaveText(
-    'No openings yet.',
+    'No open positions right now.',
   );
   await expect(page.locator('.opening-card')).toHaveCount(0);
 });
@@ -309,7 +324,7 @@ for (const screen of ['list', 'detail']) {
         page.locator(
           screen === 'list' ? '[data-opening-status]' : '[data-job-feedback]',
         ),
-      ).not.toContainText('No openings yet');
+      ).not.toContainText('No open positions right now');
       fail = false;
       await retry.click();
       await expect(retry).toBeHidden();
@@ -354,6 +369,104 @@ test('validates fields inline, focuses the first error and never uploads on sele
   ).toHaveLength(0);
 });
 
+test('requires the company description check before any application request', async ({
+  page,
+}) => {
+  const requests = await mockCareers(page);
+  await openApplication(page);
+  await fillApplication(page);
+  await submit(page).click();
+  const dialog = companyCheck(page);
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toContainText(
+    'IndoThai Securities is a stock broking company',
+  );
+  await expect(dialog.getByLabel('Company description')).toBeFocused();
+  await expect(page.locator('html')).toHaveAttribute(
+    'data-company-check-open',
+    '',
+  );
+  await dialog.getByRole('button', { name: 'Confirm and submit' }).focus();
+  await page.keyboard.press('Tab');
+  await expect(dialog.getByLabel('Company description')).toBeFocused();
+  await page.keyboard.press('Shift+Tab');
+  await expect(
+    dialog.getByRole('button', { name: 'Confirm and submit' }),
+  ).toBeFocused();
+  expect(
+    requests.filter((request) => request.method() === 'POST'),
+  ).toHaveLength(0);
+
+  await confirmCompanyCheck(page, 'a finance company');
+  await expect(dialog).toBeVisible();
+  await expect(dialog.locator('#company-check-error')).toHaveText(
+    'Type “stock broking company” exactly as shown.',
+  );
+  expect(
+    requests.filter((request) => request.method() === 'POST'),
+  ).toHaveLength(0);
+
+  await confirmCompanyCheck(page, '  Stock   Broking Company  ');
+  await expect(dialog).toBeHidden();
+  await expect(status(page)).toHaveText(
+    'Thank you. Your application has been submitted.',
+  );
+});
+
+for (const dismissal of ['Cancel', 'Escape', 'backdrop'] as const) {
+  test(`${dismissal} closes the company check without sending`, async ({
+    page,
+  }) => {
+    const requests = await mockCareers(page);
+    await openApplication(page);
+    await fillApplication(page);
+    await submit(page).click();
+    const dialog = companyCheck(page);
+    if (dismissal === 'Cancel')
+      await dialog.getByRole('button', { name: 'Cancel' }).click();
+    else if (dismissal === 'Escape') await page.keyboard.press('Escape');
+    else await page.mouse.click(1, 1);
+    await expect(dialog).toBeHidden();
+    await expect(submit(page)).toBeFocused();
+    expect(
+      requests.filter((request) => request.method() === 'POST'),
+    ).toHaveLength(0);
+  });
+}
+
+for (const viewport of [
+  { width: 760, height: 926 },
+  { width: 320, height: 600 },
+]) {
+  test(`company check stays within a ${viewport.width}px viewport`, async ({
+    page,
+  }, testInfo) => {
+    await page.setViewportSize(viewport);
+    await mockCareers(page);
+    await openApplication(page);
+    await fillApplication(page);
+    await submit(page).click();
+    const dialog = companyCheck(page);
+    await expect(dialog).toBeVisible();
+    const bounds = await dialog.boundingBox();
+    expect(bounds?.x).toBeGreaterThanOrEqual(0);
+    expect(bounds?.y).toBeGreaterThanOrEqual(0);
+    expect((bounds?.x ?? 0) + (bounds?.width ?? 0)).toBeLessThanOrEqual(
+      viewport.width,
+    );
+    expect((bounds?.y ?? 0) + (bounds?.height ?? 0)).toBeLessThanOrEqual(
+      viewport.height,
+    );
+    await expect(dialog.getByRole('button', { name: 'Cancel' })).toBeVisible();
+    await expect(
+      dialog.getByRole('button', { name: 'Confirm and submit' }),
+    ).toBeVisible();
+    await page.screenshot({
+      path: testInfo.outputPath(`company-check-${viewport.width}.png`),
+    });
+  });
+}
+
 for (const size of [100, 2_000_000]) {
   test(`submits ${size}-byte PDF with exact payload, no credentials and confirmed clearing`, async ({
     page,
@@ -373,7 +486,7 @@ for (const size of [100, 2_000_000]) {
     expect(
       requests.filter((request) => request.method() === 'POST'),
     ).toHaveLength(0);
-    await submit(page).click();
+    await startSubmission(page);
     await expect(status(page)).toHaveText(
       'Thank you. Your application has been submitted.',
     );
@@ -441,7 +554,7 @@ test('accepts blank optional fields and blocks duplicate clicks without changing
   await openApplication(page);
   await fillApplication(page);
   const before = await submit(page).boundingBox();
-  await submit(page).click();
+  await startSubmission(page);
   await expect(status(page)).toHaveText('Uploading resume…');
   const sendingButton = page.locator(
     '[data-application-form] button[type=submit]',
@@ -494,7 +607,8 @@ for (const [label, file, error] of [
     await openApplication(page);
     await fillApplication(page);
     await page.locator('#candidate-resume').setInputFiles(file);
-    await submit(page).click();
+    if (label === 'renamed') await startSubmission(page);
+    else await submit(page).click();
     await expect(page.locator('#candidate-resume-error')).toContainText(error);
     await expect(page.locator('#candidate-resume')).toBeFocused();
     expect(
@@ -520,7 +634,7 @@ test('removes and replaces files and rechecks closed jobs before uploading', asy
     'replacement.pdf',
   );
   entries[0].job_status = 'Closed';
-  await submit(page).click();
+  await startSubmission(page);
   await expect(status(page)).toContainText('no longer accepting applications');
   await expect(submit(page)).toBeDisabled();
   expect(
@@ -545,7 +659,7 @@ for (const phase of ['upload', 'candidates']) {
       );
       await openApplication(page);
       await fillApplication(page);
-      await submit(page).click();
+      await startSubmission(page);
       await expect(page.locator('[data-application-form]')).toHaveAttribute(
         'data-state',
         'error',
@@ -578,9 +692,9 @@ test('manual retry reuses only the same confirmed upload and replacement uploads
   );
   await openApplication(page);
   await fillApplication(page);
-  await submit(page).click();
+  await startSubmission(page);
   await expect(status(page)).toContainText('not accepted');
-  await submit(page).click();
+  await startSubmission(page);
   await expect.poll(() => attempts).toBe(2);
   await expect(submit(page)).toBeEnabled();
   expect(
@@ -589,7 +703,7 @@ test('manual retry reuses only the same confirmed upload and replacement uploads
   await page
     .locator('#candidate-resume')
     .setInputFiles(pdf(200, 'new-resume.pdf'));
-  await submit(page).click();
+  await startSubmission(page);
   await expect(status(page)).toContainText('has been submitted');
   expect(
     requests.filter((request) => request.url() === `${api}/private-upload`),
@@ -625,7 +739,7 @@ for (const stage of ['list', 'detail', 'upload', 'candidates']) {
     } else {
       await openApplication(page);
       await fillApplication(page);
-      await submit(page).click();
+      await startSubmission(page);
       await expect(status(page)).toContainText('could not confirm', {
         timeout: 23_000,
       });

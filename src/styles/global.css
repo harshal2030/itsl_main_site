@@ -22,6 +22,13 @@
   font-weight: 100 900;
   font-display: swap;
 }
+@font-face {
+  font-family: OpenDyslexic;
+  src: url('/fonts/open-dyslexic-regular.woff') format('woff');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
 
 @layer base {
   html {
@@ -98,6 +105,148 @@
       scrollbar-color: auto;
     }
   }
+}
+
+html[data-a11y-contrast='high'] {
+  color-scheme: light;
+  filter: contrast(1.5);
+}
+
+html[data-a11y-contrast='high'] body {
+  background: var(--color-accessibility-contrast-white) !important;
+  color: var(--color-accessibility-contrast-black) !important;
+}
+
+html[data-a11y-contrast='high'] a {
+  color: var(--color-accessibility-contrast-link) !important;
+  text-decoration: underline !important;
+}
+
+/* User-selected contrast must override component-local form border colors. */
+html[data-a11y-contrast='high'] :where(button, input, select, textarea) {
+  border: 2px solid var(--color-accessibility-contrast-black) !important;
+}
+
+html[data-a11y-contrast='high'] img:not([data-accessibility-toolbar] img) {
+  filter: contrast(1.2);
+}
+
+html[data-a11y-contrast='dark'],
+html[data-a11y-contrast='dark'] [data-accessibility-toolbar],
+html[data-a11y-contrast='dark'] canvas,
+html[data-a11y-contrast='dark'] img,
+html[data-a11y-contrast='dark'] svg,
+html[data-a11y-contrast='dark'] video {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+html[data-a11y-contrast='inverted'] {
+  color-scheme: dark;
+  background: var(--color-accessibility-contrast-black) !important;
+  color: var(--color-accessibility-contrast-yellow) !important;
+  --color-white: var(--color-accessibility-contrast-black);
+  --color-body: var(--color-accessibility-contrast-yellow);
+  --color-ink: var(--color-accessibility-contrast-yellow);
+  --color-muted: var(--color-accessibility-contrast-white);
+  --color-brand: var(--color-accessibility-contrast-cyan);
+  --color-brand-hover: var(--color-accessibility-contrast-white);
+  --color-border: var(--color-accessibility-contrast-yellow);
+  --color-subtle: var(--color-accessibility-contrast-white);
+  --color-footer: var(--color-accessibility-contrast-black);
+  --color-soft: var(--color-accessibility-inverted-control);
+  --color-panel-border: var(--color-accessibility-contrast-yellow);
+  --color-company-band: var(--color-accessibility-inverted-control);
+}
+
+html[data-a11y-contrast='inverted'] body {
+  background: var(--color-accessibility-contrast-black) !important;
+  color: var(--color-accessibility-contrast-yellow) !important;
+}
+
+/* User-selected inversion must override component-local heading and link colors. */
+html[data-a11y-contrast='inverted']
+  :where(h1, h2, h3, h4, h5, h6):not([data-accessibility-toolbar] *) {
+  color: var(--color-accessibility-contrast-white) !important;
+}
+
+html[data-a11y-contrast='inverted'] a {
+  color: var(--color-accessibility-contrast-cyan) !important;
+  text-decoration: underline !important;
+}
+
+/* Keep the toolbar readable while matching the staging page palette. */
+html[data-a11y-contrast='inverted']
+  button:not([data-accessibility-toolbar] button) {
+  border-color: var(--color-accessibility-contrast-white) !important;
+  background: var(--color-accessibility-inverted-button) !important;
+  color: var(--color-accessibility-contrast-white) !important;
+}
+
+html[data-a11y-contrast='inverted']
+  :where(input, select, textarea):not([data-accessibility-toolbar] *) {
+  border-color: var(--color-accessibility-contrast-yellow) !important;
+  background: var(--color-accessibility-inverted-control) !important;
+  color: var(--color-accessibility-contrast-white) !important;
+}
+
+/* The dyslexia preference intentionally overrides every page component's text metrics. */
+html[data-a11y-dyslexic] body,
+html[data-a11y-dyslexic]
+  body
+  :where(
+    a,
+    button,
+    dd,
+    dt,
+    figcaption,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    input,
+    label,
+    legend,
+    li,
+    p,
+    select,
+    span,
+    td,
+    textarea,
+    th
+  ) {
+  font-family: OpenDyslexic, 'Trebuchet MS', sans-serif !important;
+  letter-spacing: var(--accessibility-dyslexic-letter-spacing) !important;
+  line-height: var(--accessibility-dyslexic-leading) !important;
+  word-spacing: var(--accessibility-dyslexic-word-spacing) !important;
+}
+
+/* Keep the control panel compact and stable while it changes the page typography. */
+html[data-a11y-dyslexic] [data-accessibility-toolbar],
+html[data-a11y-dyslexic] [data-accessibility-toolbar] * {
+  font-family: var(--font-body) !important;
+  letter-spacing: normal !important;
+  line-height: var(--accessibility-leading) !important;
+  word-spacing: normal !important;
+}
+
+/* The enhanced focus preference must remain visible above component focus styles. */
+html[data-a11y-keyboard-enabled][data-a11y-keyboard-active] :focus-visible {
+  outline: var(--border-focus) solid var(--color-accessibility-primary) !important;
+  outline-offset: var(--focus-offset) !important;
+  box-shadow: var(--accessibility-focus-shadow) !important;
+}
+
+html[data-a11y-keyboard-enabled][data-a11y-keyboard-active] a:focus-visible {
+  text-decoration: underline !important;
+}
+
+/* The audit outline must be visible even when an image component defines its own outline. */
+img[data-a11y-alt-missing] {
+  outline: var(--accessibility-alt-outline-width) solid
+    var(--color-accessibility-alt-missing) !important;
+  outline-offset: var(--accessibility-alt-outline-offset) !important;
 }
 
 @layer components {

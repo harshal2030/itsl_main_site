@@ -85,6 +85,32 @@ test('desktop header actions match the staging button height', async ({
   }
 });
 
+test('wide desktop header uses the full width with token-owned gutters', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1919, height: 926 });
+  await page.goto('/careers/');
+  const geometry = await page.evaluate(() => {
+    const header = document.querySelector<HTMLElement>('.header-inner')!;
+    const brand = header.querySelector<HTMLElement>('.brand')!;
+    const controls = header.lastElementChild as HTMLElement;
+    const headerBox = header.getBoundingClientRect();
+    const brandBox = brand.getBoundingClientRect();
+    const controlsBox = controls.getBoundingClientRect();
+    return {
+      clientWidth: document.documentElement.clientWidth,
+      headerLeft: headerBox.left,
+      headerWidth: headerBox.width,
+      brandInset: brandBox.left - headerBox.left,
+      controlsInset: headerBox.right - controlsBox.right,
+    };
+  });
+  expect(geometry.headerLeft).toBeLessThan(1);
+  expect(Math.abs(geometry.headerWidth - geometry.clientWidth)).toBeLessThan(1);
+  expect(geometry.brandInset).toBe(40);
+  expect(geometry.controlsInset).toBe(40);
+});
+
 for (const width of [729, 390, 320]) {
   test(`statistics and testimonials stay aligned at ${width}px`, async ({
     page,

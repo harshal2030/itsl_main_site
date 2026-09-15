@@ -110,7 +110,7 @@ test.describe('Raise ticket', () => {
     await expect(page.getByRole('status')).toContainText('raised for review');
     expect(uploads).toBe(0);
     for (const control of await page
-      .locator('input:not([type=file]), textarea')
+      .locator('form input:not([type=file]), form textarea')
       .all())
       await expect(control).toHaveValue('');
     await expect(

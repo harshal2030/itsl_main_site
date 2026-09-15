@@ -96,8 +96,8 @@ import { site } from '../../data/site';
       });
       list.replaceChildren(...cards);
       status.textContent = openings.length
-        ? `${openings.length} ${openings.length === 1 ? 'opening' : 'openings'}. Applications are available for Open positions.`
-        : 'No openings yet.';
+        ? `${openings.length} open ${openings.length === 1 ? 'position' : 'positions'}.`
+        : 'No open positions right now.';
       if (
         retryHadFocus &&
         (document.activeElement === retry ||

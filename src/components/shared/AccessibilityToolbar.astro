@@ -1,0 +1,1177 @@
+<div class="accessibility-toolbar" data-accessibility-toolbar hidden>
+  <button
+    class="accessibility-trigger"
+    type="button"
+    aria-label="Open accessibility toolbar"
+    aria-expanded="false"
+    aria-controls="accessibility-panel"
+    data-accessibility-trigger
+  >
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="4" r="1"></circle>
+      <path d="M7 8h10M12 8v8M9 20l3-4 3 4"></path>
+    </svg>
+  </button>
+
+  <section
+    class="accessibility-panel"
+    id="accessibility-panel"
+    role="dialog"
+    aria-modal="false"
+    aria-labelledby="accessibility-title"
+    aria-hidden="true"
+    data-accessibility-panel
+    hidden
+  >
+    <div class="accessibility-panel-header">
+      <h2 id="accessibility-title">Accessibility Options</h2>
+      <button
+        class="accessibility-close"
+        type="button"
+        aria-label="Close accessibility toolbar"
+        data-accessibility-close
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path d="m6 6 12 12M18 6 6 18"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div class="accessibility-panel-body">
+      <section class="accessibility-section" aria-labelledby="font-size-title">
+        <h3 id="font-size-title">Font Size</h3>
+        <div class="font-controls">
+          <button
+            type="button"
+            aria-label="Decrease font size"
+            data-font-decrease
+          >
+            A−
+          </button>
+          <output class="font-indicator" aria-live="polite" data-font-indicator
+            >100%</output
+          >
+          <button
+            type="button"
+            aria-label="Increase font size"
+            data-font-increase
+          >
+            A+
+          </button>
+          <button type="button" aria-label="Reset font size" data-font-reset>
+            Reset
+          </button>
+        </div>
+      </section>
+
+      <section class="accessibility-section" aria-labelledby="contrast-title">
+        <h3 id="contrast-title">Contrast</h3>
+        <div class="contrast-controls" data-contrast-controls>
+          <button type="button" aria-pressed="true" data-contrast="default">
+            Default
+          </button>
+          <button type="button" aria-pressed="false" data-contrast="high">
+            High Contrast
+          </button>
+          <button type="button" aria-pressed="false" data-contrast="dark">
+            Dark Mode
+          </button>
+          <button type="button" aria-pressed="false" data-contrast="inverted">
+            Inverted Colors
+          </button>
+        </div>
+      </section>
+
+      <section class="accessibility-section" aria-labelledby="dyslexic-title">
+        <h3 id="dyslexic-title">Dyslexia Friendly</h3>
+        <button
+          class="wide-control"
+          type="button"
+          aria-pressed="false"
+          data-dyslexic-toggle
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path d="M4 7V4h16v3M9 20h6M12 4v16"></path>
+          </svg>
+          <span>Toggle dyslexia-friendly font</span>
+        </button>
+      </section>
+
+      <section class="accessibility-section" aria-labelledby="speech-title">
+        <h3 id="speech-title">Text to Speech</h3>
+        <div class="speech-controls" data-speech-controls>
+          <div class="speech-actions">
+            <button type="button" aria-label="Read page aloud" data-speech-play>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path d="m6 4 13 8-13 8z"></path>
+              </svg>
+            </button>
+            <button
+              type="button"
+              aria-label="Pause reading"
+              data-speech-pause
+              disabled
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path d="M7 5v14M17 5v14"></path>
+              </svg>
+            </button>
+            <button
+              type="button"
+              aria-label="Stop reading"
+              data-speech-stop
+              disabled
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <rect x="5" y="5" width="14" height="14" rx="1"></rect>
+              </svg>
+            </button>
+          </div>
+          <p class="speech-hint">
+            Select text on the page, then press play. If no text is selected,
+            the main page content will be read.
+          </p>
+          <div class="speech-field">
+            <label for="accessibility-voice">Voice</label>
+            <select id="accessibility-voice" data-speech-voice disabled>
+              <option value="">Default browser voice</option>
+            </select>
+          </div>
+          <div class="speech-field">
+            <label for="accessibility-rate">Speech rate</label>
+            <input
+              id="accessibility-rate"
+              type="range"
+              min="0.5"
+              max="2"
+              step="0.25"
+              value="1"
+              data-speech-rate
+            />
+            <output for="accessibility-rate" data-speech-rate-output>1×</output>
+          </div>
+          <p class="speech-unsupported" data-speech-unsupported hidden>
+            Text-to-speech is not supported in this browser.
+          </p>
+        </div>
+      </section>
+
+      <section class="accessibility-section" aria-labelledby="alt-text-title">
+        <h3 id="alt-text-title">Image Alt Text</h3>
+        <button
+          class="wide-control"
+          type="button"
+          aria-pressed="false"
+          data-alt-audit-toggle
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+            <path d="m21 15-5-5L5 21"></path>
+          </svg>
+          <span>Highlight images without alt text</span>
+        </button>
+      </section>
+
+      <section class="accessibility-section" aria-labelledby="keyboard-title">
+        <h3 id="keyboard-title">Keyboard Navigation</h3>
+        <button
+          class="wide-control"
+          type="button"
+          aria-pressed="false"
+          data-keyboard-toggle
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+            <path
+              d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10"
+            ></path>
+          </svg>
+          <span>Enhanced keyboard navigation</span>
+        </button>
+      </section>
+
+      <button class="reset-all" type="button" data-reset-all>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
+          <path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"></path>
+        </svg>
+        <span>Reset all settings</span>
+      </button>
+    </div>
+  </section>
+
+  <div
+    class="accessibility-status"
+    aria-live="polite"
+    aria-atomic="true"
+    data-accessibility-status
+  >
+  </div>
+</div>
+
+<style>
+  @reference '../../styles/global.css';
+
+  .accessibility-toolbar {
+    position: fixed;
+    right: max(var(--accessibility-inset), env(safe-area-inset-right));
+    bottom: max(var(--accessibility-inset), env(safe-area-inset-bottom));
+    z-index: var(--layer-accessibility);
+    color: var(--color-accessibility-text);
+    font-family: var(--font-body);
+    font-size: var(--accessibility-text);
+    line-height: var(--accessibility-leading);
+  }
+  .accessibility-toolbar,
+  .accessibility-toolbar * {
+    box-sizing: border-box;
+  }
+  .accessibility-trigger,
+  .accessibility-close,
+  .accessibility-panel button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--target-min);
+    min-height: var(--target-min);
+    border: var(--border-thin) solid var(--color-accessibility-control-border);
+    border-radius: var(--radius-menu);
+    background: var(--color-accessibility-background);
+    color: var(--color-accessibility-text);
+    font: inherit;
+    font-size: var(--accessibility-control-text);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--accessibility-leading);
+  }
+  .accessibility-trigger {
+    width: var(--accessibility-trigger-size);
+    min-width: var(--accessibility-trigger-size);
+    height: var(--accessibility-trigger-size);
+    min-height: var(--accessibility-trigger-size);
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: var(--color-accessibility-primary);
+    color: var(--color-accessibility-background);
+    box-shadow: var(--shadow-accessibility-trigger);
+    transition:
+      transform var(--default-transition-duration)
+        var(--default-transition-timing-function),
+      box-shadow var(--default-transition-duration)
+        var(--default-transition-timing-function);
+  }
+  .accessibility-trigger:hover {
+    background: var(--color-accessibility-primary);
+    box-shadow: var(--shadow-accessibility-trigger-hover);
+    transform: scale(var(--accessibility-trigger-hover-scale));
+  }
+  .accessibility-trigger svg {
+    width: var(--accessibility-trigger-icon);
+    height: var(--accessibility-trigger-icon);
+  }
+  .accessibility-panel {
+    position: absolute;
+    right: 0;
+    bottom: calc(
+      var(--accessibility-trigger-size) + var(--accessibility-panel-gap)
+    );
+    width: min(
+      var(--accessibility-panel-width),
+      calc(100vw - 2 * var(--accessibility-mobile-gutter))
+    );
+    max-height: var(--accessibility-panel-max-height);
+    padding: 0;
+    border: var(--border-thin) solid var(--color-accessibility-panel-border);
+    border-radius: var(--radius-card);
+    background: var(--color-accessibility-background);
+    color: var(--color-accessibility-text);
+    box-shadow: var(--shadow-accessibility-panel);
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+  }
+  .accessibility-panel:not([hidden]) {
+    display: block;
+    animation: accessibility-panel-in var(--default-transition-duration)
+      var(--default-transition-timing-function);
+  }
+  .accessibility-panel-header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: var(--accessibility-header-height);
+    padding: var(--accessibility-header-padding-y)
+      var(--accessibility-header-padding-x);
+    border-bottom: var(--border-thin) solid
+      var(--color-accessibility-panel-border);
+    border-radius: var(--radius-card) var(--radius-card) 0 0;
+    background: var(--color-accessibility-primary);
+    color: var(--color-accessibility-background);
+  }
+  .accessibility-panel-header h2 {
+    margin: 0;
+    color: inherit;
+    font-family: var(--font-body);
+    font-size: var(--accessibility-title-text);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--accessibility-leading);
+  }
+  .accessibility-close {
+    flex: 0 0 var(--target-min);
+    padding: 0;
+    border-color: transparent;
+    background: transparent;
+    color: inherit;
+  }
+  .accessibility-close:hover,
+  .accessibility-close:active {
+    border-color: var(--color-accessibility-background);
+    background: transparent;
+  }
+  .accessibility-close svg,
+  .accessibility-panel button svg {
+    width: var(--accessibility-control-icon);
+    height: var(--accessibility-control-icon);
+    stroke-width: 2;
+  }
+  .accessibility-panel-body {
+    padding: var(--accessibility-panel-padding-y)
+      var(--accessibility-panel-padding-x);
+  }
+  .accessibility-section {
+    margin: 0 0 var(--accessibility-section-gap);
+    padding: 0 0 var(--accessibility-section-padding);
+    border-bottom: var(--border-thin) solid
+      var(--color-accessibility-section-border);
+  }
+  .accessibility-section h3 {
+    margin: 0 0 var(--accessibility-control-gap);
+    color: var(--color-accessibility-primary);
+    font-family: var(--font-body);
+    font-size: var(--accessibility-section-title);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--accessibility-title-tracking);
+    line-height: var(--accessibility-leading);
+    text-transform: uppercase;
+  }
+  .font-controls,
+  .speech-actions,
+  .speech-field {
+    display: flex;
+    align-items: center;
+    gap: var(--accessibility-control-gap);
+  }
+  .font-controls button,
+  .speech-actions button {
+    padding-inline: var(--accessibility-control-padding-x);
+  }
+  .font-indicator {
+    min-width: var(--accessibility-indicator-width);
+    font-size: var(--accessibility-indicator-text);
+    font-weight: var(--font-weight-semibold);
+    text-align: center;
+  }
+  .contrast-controls {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--accessibility-control-gap);
+  }
+  .contrast-controls button,
+  .wide-control {
+    padding: var(--accessibility-control-padding-y)
+      var(--accessibility-control-padding-x);
+  }
+  .accessibility-panel button:hover:not(:disabled) {
+    border-color: var(--color-accessibility-secondary);
+    background: var(--color-accessibility-secondary);
+    color: var(--color-accessibility-background);
+    text-decoration: none;
+  }
+  .accessibility-panel button[aria-pressed='true'] {
+    border-color: var(--color-accessibility-primary);
+    background: var(--color-accessibility-primary);
+    color: var(--color-accessibility-background);
+  }
+  .accessibility-panel button:disabled,
+  .accessibility-panel select:disabled {
+    opacity: var(--accessibility-disabled-opacity);
+  }
+  .wide-control {
+    justify-content: flex-start;
+    width: 100%;
+    text-align: left;
+  }
+  .speech-controls {
+    display: grid;
+    min-width: 0;
+    gap: var(--accessibility-control-gap);
+  }
+  .speech-hint,
+  .speech-unsupported {
+    margin: 0;
+    color: var(--color-accessibility-muted);
+    font-size: var(--accessibility-hint-text);
+    line-height: var(--accessibility-hint-leading);
+  }
+  .speech-field label {
+    flex: 0 0 auto;
+    font-size: var(--accessibility-label-text);
+  }
+  .speech-field {
+    min-width: 0;
+  }
+  .speech-field select,
+  .speech-field input {
+    width: 0;
+    min-width: 0;
+    max-width: 100%;
+    flex: 1 1 auto;
+  }
+  .speech-field select {
+    min-height: var(--target-min);
+    padding-inline: var(--accessibility-control-padding-x);
+    border: var(--border-thin) solid var(--color-accessibility-control-border);
+    border-radius: var(--radius-menu);
+    background: var(--color-accessibility-background);
+    color: var(--color-accessibility-text);
+    font: inherit;
+    font-size: var(--accessibility-label-text);
+  }
+  .speech-field input {
+    accent-color: var(--color-accessibility-primary);
+  }
+  .speech-field output {
+    min-width: var(--accessibility-rate-width);
+    font-size: var(--accessibility-label-text);
+    text-align: right;
+  }
+  .reset-all {
+    width: 100%;
+    gap: var(--accessibility-control-gap);
+    padding: var(--accessibility-control-padding-y)
+      var(--accessibility-control-padding-x);
+    border-color: var(--color-accessibility-reset);
+    background: var(--color-accessibility-reset);
+    color: var(--color-accessibility-background);
+  }
+  .reset-all:hover:not(:disabled) {
+    border-color: var(--color-accessibility-reset-hover);
+    background: var(--color-accessibility-reset-hover);
+  }
+  .accessibility-status {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .accessibility-toolbar :focus-visible {
+    outline-color: var(--color-accessibility-focus);
+  }
+
+  @keyframes accessibility-panel-in {
+    from {
+      opacity: 0;
+      transform: translateY(var(--accessibility-panel-motion-distance));
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (width < theme(--breakpoint-small)) {
+    .accessibility-toolbar {
+      right: max(var(--accessibility-mobile-inset), env(safe-area-inset-right));
+      bottom: max(
+        var(--accessibility-mobile-inset),
+        env(safe-area-inset-bottom)
+      );
+    }
+    .accessibility-panel {
+      max-height: var(--accessibility-panel-mobile-max-height);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .accessibility-panel:not([hidden]) {
+      animation: none;
+    }
+    .accessibility-trigger {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .accessibility-trigger,
+    .accessibility-panel,
+    .accessibility-panel button,
+    .speech-field select {
+      border: var(--border-thin) solid CanvasText;
+      forced-color-adjust: auto;
+    }
+  }
+</style>
+
+<script>
+  type ContrastMode = 'default' | 'high' | 'dark' | 'inverted';
+
+  interface AccessibilityPreferences {
+    version: 1;
+    fontSize: number;
+    contrast: ContrastMode;
+    dyslexicFont: boolean;
+    ttsRate: number;
+    altTextAudit: boolean;
+    keyboardNav: boolean;
+  }
+
+  const preferenceKey = 'a11y-plugin-prefs';
+  const defaultPreferences: AccessibilityPreferences = {
+    version: 1,
+    fontSize: 0,
+    contrast: 'default',
+    dyslexicFont: false,
+    ttsRate: 1,
+    altTextAudit: false,
+    keyboardNav: false,
+  };
+  const contrastModes: ContrastMode[] = ['default', 'high', 'dark', 'inverted'];
+  const fontMinimum = -30;
+  const fontMaximum = 50;
+  const fontStep = 10;
+
+  const toolbar = document.querySelector<HTMLElement>(
+    '[data-accessibility-toolbar]',
+  );
+  const trigger = toolbar?.querySelector<HTMLButtonElement>(
+    '[data-accessibility-trigger]',
+  );
+  const panel = toolbar?.querySelector<HTMLElement>(
+    '[data-accessibility-panel]',
+  );
+  const closeButton = toolbar?.querySelector<HTMLButtonElement>(
+    '[data-accessibility-close]',
+  );
+  const status = toolbar?.querySelector<HTMLElement>(
+    '[data-accessibility-status]',
+  );
+  const fontIndicator = toolbar?.querySelector<HTMLOutputElement>(
+    '[data-font-indicator]',
+  );
+  const fontDecrease = toolbar?.querySelector<HTMLButtonElement>(
+    '[data-font-decrease]',
+  );
+  const fontIncrease = toolbar?.querySelector<HTMLButtonElement>(
+    '[data-font-increase]',
+  );
+  const dyslexicToggle = toolbar?.querySelector<HTMLButtonElement>(
+    '[data-dyslexic-toggle]',
+  );
+  const altAuditToggle = toolbar?.querySelector<HTMLButtonElement>(
+    '[data-alt-audit-toggle]',
+  );
+  const keyboardToggle = toolbar?.querySelector<HTMLButtonElement>(
+    '[data-keyboard-toggle]',
+  );
+  const speechPlay =
+    toolbar?.querySelector<HTMLButtonElement>('[data-speech-play]');
+  const speechPause = toolbar?.querySelector<HTMLButtonElement>(
+    '[data-speech-pause]',
+  );
+  const speechStop =
+    toolbar?.querySelector<HTMLButtonElement>('[data-speech-stop]');
+  const speechVoice = toolbar?.querySelector<HTMLSelectElement>(
+    '[data-speech-voice]',
+  );
+  const speechRate =
+    toolbar?.querySelector<HTMLInputElement>('[data-speech-rate]');
+  const speechRateOutput = toolbar?.querySelector<HTMLOutputElement>(
+    '[data-speech-rate-output]',
+  );
+  const speechUnsupported = toolbar?.querySelector<HTMLElement>(
+    '[data-speech-unsupported]',
+  );
+
+  let preferences = { ...defaultPreferences };
+  let altObserver: MutationObserver | null = null;
+  let speechQueue: string[] = [];
+  let speechIndex = 0;
+  let speaking = false;
+  let paused = false;
+
+  const hasSpeechSupport = () =>
+    typeof window.speechSynthesis !== 'undefined' &&
+    typeof window.SpeechSynthesisUtterance === 'function';
+
+  const isBoolean = (value: unknown): value is boolean =>
+    typeof value === 'boolean';
+  const isValidFontSize = (value: unknown): value is number =>
+    Number.isInteger(value) &&
+    Number(value) >= fontMinimum &&
+    Number(value) <= fontMaximum &&
+    Number(value) % fontStep === 0;
+  const isValidRate = (value: unknown): value is number =>
+    typeof value === 'number' &&
+    value >= 0.5 &&
+    value <= 2 &&
+    Number.isInteger(value * 4);
+
+  const loadPreferences = (): AccessibilityPreferences => {
+    try {
+      const stored = localStorage.getItem(preferenceKey);
+      if (!stored) return { ...defaultPreferences };
+      const value = JSON.parse(stored) as Record<string, unknown>;
+      if (value.version !== 1) return { ...defaultPreferences };
+      return {
+        version: 1,
+        fontSize: isValidFontSize(value.fontSize)
+          ? value.fontSize
+          : defaultPreferences.fontSize,
+        contrast: contrastModes.includes(value.contrast as ContrastMode)
+          ? (value.contrast as ContrastMode)
+          : defaultPreferences.contrast,
+        dyslexicFont: isBoolean(value.dyslexicFont)
+          ? value.dyslexicFont
+          : defaultPreferences.dyslexicFont,
+        ttsRate: isValidRate(value.ttsRate)
+          ? value.ttsRate
+          : defaultPreferences.ttsRate,
+        altTextAudit: isBoolean(value.altTextAudit)
+          ? value.altTextAudit
+          : defaultPreferences.altTextAudit,
+        keyboardNav: isBoolean(value.keyboardNav)
+          ? value.keyboardNav
+          : isBoolean(value.active)
+            ? value.active
+            : defaultPreferences.keyboardNav,
+      };
+    } catch {
+      return { ...defaultPreferences };
+    }
+  };
+
+  const savePreferences = () => {
+    try {
+      localStorage.setItem(preferenceKey, JSON.stringify(preferences));
+    } catch {
+      // The controls remain available for this page when storage is blocked.
+    }
+  };
+
+  const announce = (message: string) => {
+    if (!status) return;
+    status.textContent = '';
+    window.requestAnimationFrame(() => {
+      status.textContent = message;
+    });
+  };
+
+  const applyFontSize = (shouldAnnounce = false) => {
+    const percentage = 100 + preferences.fontSize;
+    if (preferences.fontSize === 0)
+      document.documentElement.style.removeProperty('font-size');
+    else document.documentElement.style.fontSize = `${percentage}%`;
+    if (fontIndicator) fontIndicator.value = `${percentage}%`;
+    if (fontDecrease)
+      fontDecrease.disabled = preferences.fontSize <= fontMinimum;
+    if (fontIncrease)
+      fontIncrease.disabled = preferences.fontSize >= fontMaximum;
+    if (shouldAnnounce) announce(`Font size changed to ${percentage}%.`);
+  };
+
+  const applyContrast = (shouldAnnounce = false) => {
+    if (preferences.contrast === 'default')
+      document.documentElement.removeAttribute('data-a11y-contrast');
+    else
+      document.documentElement.setAttribute(
+        'data-a11y-contrast',
+        preferences.contrast,
+      );
+    toolbar
+      ?.querySelectorAll<HTMLButtonElement>('[data-contrast]')
+      .forEach((button) => {
+        button.setAttribute(
+          'aria-pressed',
+          String(button.dataset.contrast === preferences.contrast),
+        );
+      });
+    if (shouldAnnounce) {
+      const label = toolbar?.querySelector<HTMLButtonElement>(
+        `[data-contrast="${preferences.contrast}"]`,
+      )?.textContent;
+      announce(`Contrast mode changed to ${label?.trim() || 'Default'}.`);
+    }
+  };
+
+  const applyDyslexicFont = (shouldAnnounce = false) => {
+    document.documentElement.toggleAttribute(
+      'data-a11y-dyslexic',
+      preferences.dyslexicFont,
+    );
+    dyslexicToggle?.setAttribute(
+      'aria-pressed',
+      String(preferences.dyslexicFont),
+    );
+    if (shouldAnnounce)
+      announce(
+        `Dyslexia-friendly font ${preferences.dyslexicFont ? 'enabled' : 'disabled'}.`,
+      );
+  };
+
+  const scanImages = () => {
+    const images = [
+      ...document.querySelectorAll<HTMLImageElement>(
+        'img:not([data-accessibility-toolbar] img)',
+      ),
+    ];
+    let missing = 0;
+    for (const image of images) {
+      const isMissing = !image.hasAttribute('alt');
+      image.toggleAttribute('data-a11y-alt-missing', isMissing);
+      if (isMissing) missing += 1;
+    }
+    return { total: images.length, missing };
+  };
+
+  const applyAltAudit = (shouldAnnounce = false) => {
+    altAuditToggle?.setAttribute(
+      'aria-pressed',
+      String(preferences.altTextAudit),
+    );
+    if (preferences.altTextAudit) {
+      const result = scanImages();
+      if (!altObserver) {
+        altObserver = new MutationObserver(scanImages);
+        altObserver.observe(document.body, {
+          subtree: true,
+          childList: true,
+          attributes: true,
+          attributeFilter: ['alt'],
+        });
+      }
+      if (shouldAnnounce)
+        announce(
+          `${result.missing} of ${result.total} images are missing an alt attribute.`,
+        );
+    } else {
+      altObserver?.disconnect();
+      altObserver = null;
+      document
+        .querySelectorAll<HTMLImageElement>('[data-a11y-alt-missing]')
+        .forEach((image) => image.removeAttribute('data-a11y-alt-missing'));
+      if (shouldAnnounce) announce('Image alt text highlighting disabled.');
+    }
+  };
+
+  const applyKeyboardNavigation = (shouldAnnounce = false) => {
+    document.documentElement.toggleAttribute(
+      'data-a11y-keyboard-enabled',
+      preferences.keyboardNav,
+    );
+    if (!preferences.keyboardNav)
+      document.documentElement.removeAttribute('data-a11y-keyboard-active');
+    keyboardToggle?.setAttribute(
+      'aria-pressed',
+      String(preferences.keyboardNav),
+    );
+    if (shouldAnnounce)
+      announce(
+        `Enhanced keyboard navigation ${preferences.keyboardNav ? 'enabled' : 'disabled'}.`,
+      );
+  };
+
+  const updateSpeechButtons = () => {
+    if (speechPlay) speechPlay.setAttribute('aria-pressed', String(speaking));
+    if (speechPause) {
+      speechPause.disabled = !speaking;
+      speechPause.setAttribute('aria-pressed', String(paused));
+      speechPause.setAttribute(
+        'aria-label',
+        paused ? 'Resume reading' : 'Pause reading',
+      );
+    }
+    if (speechStop) speechStop.disabled = !speaking;
+  };
+
+  const stopSpeech = (shouldAnnounce = false) => {
+    if (hasSpeechSupport()) window.speechSynthesis.cancel();
+    speechQueue = [];
+    speechIndex = 0;
+    speaking = false;
+    paused = false;
+    updateSpeechButtons();
+    if (shouldAnnounce) announce('Reading stopped.');
+  };
+
+  const selectedVoice = () => {
+    if (!speechVoice || !hasSpeechSupport()) return undefined;
+    return window.speechSynthesis
+      .getVoices()
+      .find((voice) => voice.name === speechVoice.value);
+  };
+
+  const speakNext = () => {
+    if (!speaking || speechIndex >= speechQueue.length || !hasSpeechSupport()) {
+      speaking = false;
+      paused = false;
+      updateSpeechButtons();
+      if (speechQueue.length) announce('Reading complete.');
+      return;
+    }
+    const utterance = new SpeechSynthesisUtterance(speechQueue[speechIndex]);
+    utterance.lang = document.documentElement.lang || 'en-IN';
+    utterance.rate = preferences.ttsRate;
+    const voice = selectedVoice();
+    if (voice) utterance.voice = voice;
+    utterance.onend = () => {
+      speechIndex += 1;
+      speakNext();
+    };
+    utterance.onerror = (event) => {
+      if (event.error !== 'canceled') announce('Reading could not continue.');
+      speaking = false;
+      paused = false;
+      updateSpeechButtons();
+    };
+    window.speechSynthesis.speak(utterance);
+  };
+
+  const extractMainText = () => {
+    const main = document.querySelector('main');
+    if (!main) return '';
+    const walker = document.createTreeWalker(main, NodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        const parent = node.parentElement;
+        if (!parent || !node.textContent?.trim())
+          return NodeFilter.FILTER_REJECT;
+        if (
+          parent.closest(
+            '[hidden], [aria-hidden="true"], script, style, template, noscript',
+          )
+        )
+          return NodeFilter.FILTER_REJECT;
+        const styles = getComputedStyle(parent);
+        if (styles.display === 'none' || styles.visibility === 'hidden')
+          return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      },
+    });
+    const parts: string[] = [];
+    let node = walker.nextNode();
+    while (node) {
+      parts.push(node.textContent || '');
+      node = walker.nextNode();
+    }
+    return parts.join(' ').replace(/\s+/g, ' ').trim();
+  };
+
+  const chunkText = (text: string) => {
+    const sentences = text.match(/[^.!?]+[.!?]+\s*|[^.!?]+$/g) || [text];
+    const chunks: string[] = [];
+    let current = '';
+    for (const sentence of sentences) {
+      if (current.length + sentence.length > 200 && current) {
+        chunks.push(current.trim());
+        current = '';
+      }
+      current += sentence;
+    }
+    if (current.trim()) chunks.push(current.trim());
+    return chunks;
+  };
+
+  const startSpeech = () => {
+    if (!hasSpeechSupport()) return;
+    if (paused) {
+      window.speechSynthesis.resume();
+      paused = false;
+      updateSpeechButtons();
+      announce('Reading resumed.');
+      return;
+    }
+    if (speaking) return;
+    const selection = window.getSelection()?.toString().trim() || '';
+    const text = selection || extractMainText();
+    if (!text) {
+      announce('No readable page text was found.');
+      return;
+    }
+    window.speechSynthesis.cancel();
+    speechQueue = chunkText(text);
+    speechIndex = 0;
+    speaking = true;
+    paused = false;
+    updateSpeechButtons();
+    announce(
+      selection ? 'Reading selected text.' : 'Reading the main page content.',
+    );
+    speakNext();
+  };
+
+  const pauseOrResumeSpeech = () => {
+    if (!speaking || !hasSpeechSupport()) return;
+    if (paused) {
+      window.speechSynthesis.resume();
+      paused = false;
+      announce('Reading resumed.');
+    } else {
+      window.speechSynthesis.pause();
+      paused = true;
+      announce('Reading paused.');
+    }
+    updateSpeechButtons();
+  };
+
+  const populateVoices = () => {
+    if (!speechVoice || !hasSpeechSupport()) return;
+    const previous = speechVoice.value;
+    const voices = window.speechSynthesis.getVoices();
+    speechVoice.replaceChildren();
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = 'Default browser voice';
+    speechVoice.append(defaultOption);
+    for (const voice of voices) {
+      const option = document.createElement('option');
+      option.value = voice.name;
+      option.textContent = `${voice.name} (${voice.lang})`;
+      speechVoice.append(option);
+    }
+    speechVoice.disabled = false;
+    if ([...speechVoice.options].some((option) => option.value === previous))
+      speechVoice.value = previous;
+  };
+
+  const initializeSpeech = () => {
+    if (!hasSpeechSupport()) {
+      if (speechPlay) speechPlay.disabled = true;
+      if (speechPause) speechPause.disabled = true;
+      if (speechStop) speechStop.disabled = true;
+      if (speechVoice) speechVoice.disabled = true;
+      if (speechRate) speechRate.disabled = true;
+      if (speechUnsupported) speechUnsupported.hidden = false;
+      return;
+    }
+    if (speechUnsupported) speechUnsupported.hidden = true;
+    populateVoices();
+    window.speechSynthesis.addEventListener('voiceschanged', populateVoices);
+    updateSpeechButtons();
+  };
+
+  const focusableControls = () =>
+    panel
+      ? [
+          ...panel.querySelectorAll<HTMLElement>(
+            'button:not(:disabled), select:not(:disabled), input:not(:disabled), [tabindex]:not([tabindex="-1"])',
+          ),
+        ].filter((element) => element.getClientRects().length > 0)
+      : [];
+
+  const closePanel = (restoreFocus = true) => {
+    if (!panel || !trigger || panel.hidden) return;
+    panel.hidden = true;
+    panel.setAttribute('aria-hidden', 'true');
+    trigger.setAttribute('aria-expanded', 'false');
+    trigger.setAttribute('aria-label', 'Open accessibility toolbar');
+    if (restoreFocus) trigger.focus();
+  };
+
+  const openPanel = () => {
+    if (!panel || !trigger) return;
+    panel.hidden = false;
+    panel.setAttribute('aria-hidden', 'false');
+    trigger.setAttribute('aria-expanded', 'true');
+    trigger.setAttribute('aria-label', 'Close accessibility toolbar');
+    closeButton?.focus();
+  };
+
+  if (toolbar && trigger && panel) {
+    preferences = loadPreferences();
+    applyFontSize();
+    applyContrast();
+    applyDyslexicFont();
+    applyAltAudit();
+    applyKeyboardNavigation();
+    if (speechRate) speechRate.value = String(preferences.ttsRate);
+    if (speechRateOutput) speechRateOutput.value = `${preferences.ttsRate}×`;
+    initializeSpeech();
+
+    trigger.addEventListener('click', () => {
+      if (panel.hidden) openPanel();
+      else closePanel();
+    });
+    closeButton?.addEventListener('click', () => closePanel());
+    toolbar
+      .querySelector<HTMLButtonElement>('[data-font-reset]')
+      ?.addEventListener('click', () => {
+        preferences.fontSize = 0;
+        applyFontSize(true);
+        savePreferences();
+      });
+    fontDecrease?.addEventListener('click', () => {
+      preferences.fontSize = Math.max(
+        fontMinimum,
+        preferences.fontSize - fontStep,
+      );
+      applyFontSize(true);
+      savePreferences();
+    });
+    fontIncrease?.addEventListener('click', () => {
+      preferences.fontSize = Math.min(
+        fontMaximum,
+        preferences.fontSize + fontStep,
+      );
+      applyFontSize(true);
+      savePreferences();
+    });
+    toolbar
+      .querySelectorAll<HTMLButtonElement>('[data-contrast]')
+      .forEach((button) => {
+        button.addEventListener('click', () => {
+          preferences.contrast = button.dataset.contrast as ContrastMode;
+          applyContrast(true);
+          savePreferences();
+        });
+      });
+    dyslexicToggle?.addEventListener('click', () => {
+      preferences.dyslexicFont = !preferences.dyslexicFont;
+      applyDyslexicFont(true);
+      savePreferences();
+    });
+    altAuditToggle?.addEventListener('click', () => {
+      preferences.altTextAudit = !preferences.altTextAudit;
+      applyAltAudit(true);
+      savePreferences();
+    });
+    keyboardToggle?.addEventListener('click', () => {
+      preferences.keyboardNav = !preferences.keyboardNav;
+      applyKeyboardNavigation(true);
+      savePreferences();
+    });
+    speechPlay?.addEventListener('click', startSpeech);
+    speechPause?.addEventListener('click', pauseOrResumeSpeech);
+    speechStop?.addEventListener('click', () => stopSpeech(true));
+    speechRate?.addEventListener('input', () => {
+      const nextRate = Number(speechRate.value);
+      if (!isValidRate(nextRate)) return;
+      preferences.ttsRate = nextRate;
+      if (speechRateOutput) speechRateOutput.value = `${nextRate}×`;
+      savePreferences();
+    });
+    toolbar
+      .querySelector<HTMLButtonElement>('[data-reset-all]')
+      ?.addEventListener('click', () => {
+        stopSpeech();
+        preferences = { ...defaultPreferences };
+        applyFontSize();
+        applyContrast();
+        applyDyslexicFont();
+        applyAltAudit();
+        applyKeyboardNavigation();
+        if (speechRate) speechRate.value = String(preferences.ttsRate);
+        if (speechRateOutput)
+          speechRateOutput.value = `${preferences.ttsRate}×`;
+        if (speechVoice) speechVoice.value = '';
+        try {
+          localStorage.removeItem(preferenceKey);
+        } catch {
+          // Reset still applies to this page when storage is blocked.
+        }
+        announce('All accessibility settings reset.');
+      });
+
+    panel.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        closePanel();
+        return;
+      }
+      if (event.key !== 'Tab') return;
+      const controls = focusableControls();
+      const first = controls[0];
+      const last = controls.at(-1);
+      if (!first || !last) return;
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+    document.addEventListener('pointerdown', (event) => {
+      if (
+        !panel.hidden &&
+        event.target instanceof Node &&
+        !toolbar.contains(event.target)
+      )
+        closePanel();
+      document.documentElement.removeAttribute('data-a11y-keyboard-active');
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Tab' && preferences.keyboardNav)
+        document.documentElement.setAttribute('data-a11y-keyboard-active', '');
+    });
+    window.addEventListener('pagehide', () => stopSpeech());
+    toolbar.hidden = false;
+  }
+</script>

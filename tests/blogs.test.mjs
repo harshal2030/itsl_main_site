@@ -75,7 +75,6 @@ for (const [route, title, heading, robots, canonical] of [
   test(`${route} initial HTML contains no CMS record`, () => {
     assert.match(text(tree), /Enable JavaScript|not configured/);
     assert.ok(!html.includes('fetch('));
-    assert.ok(!html.includes('localStorage'));
     assert.ok(!html.includes('sessionStorage'));
     if (route === 'blog') {
       const list = all(

@@ -108,6 +108,47 @@ import { careersApi } from '../../data/openings';
   >
   </p>
 </form>
+<dialog
+  class="company-check-dialog"
+  data-company-check-dialog
+  aria-labelledby="company-check-title"
+  aria-describedby="company-check-description company-check-instruction"
+>
+  <div class="company-check-body">
+    <h2 id="company-check-title">Before you submit</h2>
+    <p id="company-check-description">
+      IndoThai Securities is a stock broking company offering trading, mutual
+      fund, depository, IPO and wealth management services.
+    </p>
+    <p id="company-check-instruction">
+      To confirm you understand our business, type{' '}
+      <strong>stock broking company</strong> below.
+    </p>
+    <div class="field">
+      <label for="company-check-answer">Company description</label>
+      <input
+        id="company-check-answer"
+        type="text"
+        autocomplete="off"
+        spellcheck="false"
+        aria-describedby="company-check-instruction company-check-error"
+        data-company-check-answer
+      />
+      <span id="company-check-error" class="field-error" aria-live="polite"
+      ></span>
+    </div>
+  </div>
+  <div class="company-check-actions">
+    <button
+      class="action action-outline"
+      type="button"
+      data-company-check-cancel>Cancel</button
+    >
+    <button class="action" type="button" data-company-check-confirm
+      >Confirm and submit</button
+    >
+  </div>
+</dialog>
 <script>
   import { getOpening } from '../../data/openings';
 
@@ -127,14 +168,39 @@ import { careersApi } from '../../data/openings';
   ];
   const selectedFile = form.querySelector<HTMLElement>('[data-selected-file]')!;
   const remove = form.querySelector<HTMLButtonElement>('[data-remove-file]')!;
+  const companyCheck = document.querySelector<HTMLDialogElement>(
+    '[data-company-check-dialog]',
+  )!;
+  const companyAnswer = companyCheck.querySelector<HTMLInputElement>(
+    '[data-company-check-answer]',
+  )!;
+  const companyError = companyCheck.querySelector<HTMLElement>(
+    '#company-check-error',
+  )!;
+  const companyCancel = companyCheck.querySelector<HTMLButtonElement>(
+    '[data-company-check-cancel]',
+  )!;
+  const companyConfirm = companyCheck.querySelector<HTMLButtonElement>(
+    '[data-company-check-confirm]',
+  )!;
   const api = form.dataset.api;
   const MAX_RESUME_BYTES = 2_000_000;
+  const COMPANY_ANSWER = 'stock broking company';
   const uncertain =
     'We could not confirm your application. It may have reached us. Please contact us before submitting again.';
+  type ApplicationData = {
+    name: string;
+    email: string;
+    contact_no: string;
+    linkedin_url: string;
+    additional_links: string;
+    opening: string;
+  };
   let sending = false;
   let composing = false;
   let canApply = false;
   let uploaded: { file: File; id: number } | undefined;
+  let pendingApplication: { file: File; data: ApplicationData } | undefined;
 
   function showStatus(text: string, state: string) {
     status.textContent = text;
@@ -211,58 +277,27 @@ import { careersApi } from '../../data/openings';
       ? 'We could not confirm the resume upload. No application was sent. Please contact us before trying again.'
       : uncertain;
   }
+  function normalizeCompanyAnswer(value: string) {
+    return value.trim().replace(/\s+/g, ' ').toLocaleLowerCase('en-IN');
+  }
+  function setCompanyError(message: string) {
+    companyAnswer.setAttribute('aria-invalid', String(Boolean(message)));
+    companyError.textContent = message;
+    return !message;
+  }
+  function closeCompanyCheck() {
+    if (companyCheck.open) companyCheck.close();
+  }
+  function openCompanyCheck(file: File, data: ApplicationData) {
+    pendingApplication = { file, data };
+    companyAnswer.value = '';
+    setCompanyError('');
+    document.documentElement.setAttribute('data-company-check-open', '');
+    companyCheck.showModal();
+    companyAnswer.focus({ preventScroll: true });
+  }
 
-  form.addEventListener('compositionstart', () => {
-    composing = true;
-  });
-  form.addEventListener('compositionend', () => {
-    composing = false;
-  });
-  form.addEventListener('input', (event) => {
-    const input = event.target;
-    if (
-      input instanceof HTMLInputElement &&
-      input !== resume &&
-      input.required &&
-      input.getAttribute('aria-invalid') === 'true'
-    )
-      validate(input);
-    if (form.dataset.state === 'success') showStatus('', 'idle');
-  });
-  resume.addEventListener('change', () => {
-    uploaded = undefined;
-    showFile();
-    validateResume();
-  });
-  remove.addEventListener('click', () => {
-    resume.value = '';
-    uploaded = undefined;
-    showFile();
-    setError(resume, '');
-    resume.focus();
-  });
-
-  // Install this guard before either script can enable the fieldset.
-  form.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    if (!api || !canApply || sending || composing) return;
-    const invalid = requiredFields.filter((input) => !validate(input));
-    if (!validateResume()) invalid.push(resume);
-    if (invalid.length) {
-      showStatus('Please check the highlighted fields.', 'error');
-      invalid[0].focus();
-      return;
-    }
-    const file = resume.files![0];
-    const fields = new FormData(form);
-    const data = {
-      name: String(fields.get('name')).trim(),
-      email: String(fields.get('email')).trim(),
-      contact_no: String(fields.get('contact_no')).trim(),
-      linkedin_url: String(fields.get('linkedin_url')).trim(),
-      additional_links: String(fields.get('additional_links')).trim(),
-      opening: form.dataset.openingId!,
-    };
+  async function sendApplication(file: File, data: ApplicationData) {
     sending = true;
     fieldset.disabled = true;
     button.disabled = true;
@@ -359,6 +394,120 @@ import { careersApi } from '../../data/openings';
       button.textContent = 'Submit application';
       if (resume.getAttribute('aria-invalid') === 'true') resume.focus();
     }
+  }
+
+  form.addEventListener('compositionstart', () => {
+    composing = true;
+  });
+  form.addEventListener('compositionend', () => {
+    composing = false;
+  });
+  form.addEventListener('input', (event) => {
+    const input = event.target;
+    if (
+      input instanceof HTMLInputElement &&
+      input !== resume &&
+      input.required &&
+      input.getAttribute('aria-invalid') === 'true'
+    )
+      validate(input);
+    if (form.dataset.state === 'success') showStatus('', 'idle');
+  });
+  resume.addEventListener('change', () => {
+    uploaded = undefined;
+    showFile();
+    validateResume();
+  });
+  remove.addEventListener('click', () => {
+    resume.value = '';
+    uploaded = undefined;
+    showFile();
+    setError(resume, '');
+    resume.focus();
+  });
+  companyCheck.addEventListener('close', () => {
+    document.documentElement.removeAttribute('data-company-check-open');
+    pendingApplication = undefined;
+    companyAnswer.value = '';
+    setCompanyError('');
+    if (!sending) button.focus();
+  });
+  companyCheck.addEventListener('cancel', () => {
+    pendingApplication = undefined;
+  });
+  companyCheck.addEventListener('click', (event) => {
+    const bounds = companyCheck.getBoundingClientRect();
+    const clickedBackdrop =
+      event.clientX < bounds.left ||
+      event.clientX > bounds.right ||
+      event.clientY < bounds.top ||
+      event.clientY > bounds.bottom;
+    if (clickedBackdrop) closeCompanyCheck();
+  });
+  companyCheck.addEventListener('keydown', (event) => {
+    if (event.key !== 'Tab') return;
+    const focusable = [companyAnswer, companyCancel, companyConfirm];
+    const first = focusable[0];
+    const last = focusable.at(-1)!;
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
+  companyAnswer.addEventListener('input', () => {
+    if (companyAnswer.getAttribute('aria-invalid') === 'true')
+      setCompanyError(
+        normalizeCompanyAnswer(companyAnswer.value) === COMPANY_ANSWER
+          ? ''
+          : 'Type “stock broking company” exactly as shown.',
+      );
+  });
+  companyCancel.addEventListener('click', closeCompanyCheck);
+  companyConfirm.addEventListener('click', () => {
+    if (composing || !pendingApplication) return;
+    if (normalizeCompanyAnswer(companyAnswer.value) !== COMPANY_ANSWER) {
+      setCompanyError('Type “stock broking company” exactly as shown.');
+      companyAnswer.focus();
+      return;
+    }
+    const application = pendingApplication;
+    pendingApplication = undefined;
+    const request = sendApplication(application.file, application.data);
+    closeCompanyCheck();
+    void request;
+  });
+  companyCheck.addEventListener('compositionstart', () => {
+    composing = true;
+  });
+  companyCheck.addEventListener('compositionend', () => {
+    composing = false;
+  });
+
+  // Install this guard before either script can enable the fieldset.
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (!api || !canApply || sending || composing || companyCheck.open) return;
+    const invalid = requiredFields.filter((input) => !validate(input));
+    if (!validateResume()) invalid.push(resume);
+    if (invalid.length) {
+      showStatus('Please check the highlighted fields.', 'error');
+      invalid[0].focus();
+      return;
+    }
+    const file = resume.files![0];
+    const fields = new FormData(form);
+    const data = {
+      name: String(fields.get('name')).trim(),
+      email: String(fields.get('email')).trim(),
+      contact_no: String(fields.get('contact_no')).trim(),
+      linkedin_url: String(fields.get('linkedin_url')).trim(),
+      additional_links: String(fields.get('additional_links')).trim(),
+      opening: form.dataset.openingId!,
+    };
+    openCompanyCheck(file, data);
   });
   form.addEventListener('opening-ready', enableApplication);
   enableApplication();
@@ -480,6 +629,63 @@ import { careersApi } from '../../data/openings';
   }
   [data-state='success'] .application-status {
     color: var(--color-brand);
+  }
+  .company-check-dialog {
+    width: min(
+      calc(var(--form-panel-max) / 2),
+      calc(100% - 2 * var(--space-md))
+    );
+    max-height: calc(100dvh - 2 * var(--space-md));
+    margin: auto;
+    padding: 0;
+    border: var(--border-thin) solid var(--color-panel-border);
+    border-radius: var(--radius-card);
+    background: var(--color-white);
+    color: var(--color-body);
+    box-shadow: var(--shadow-menu);
+    overflow: hidden;
+    z-index: var(--layer-dialog);
+  }
+  .company-check-dialog[open] {
+    display: flex;
+    flex-direction: column;
+  }
+  .company-check-dialog::backdrop {
+    background: var(--investor-alert-backdrop);
+  }
+  .company-check-body {
+    min-height: 0;
+    padding: var(--space-lg);
+    overflow-y: auto;
+  }
+  .company-check-body h2 {
+    margin-bottom: var(--space-md);
+  }
+  .company-check-body p {
+    margin-bottom: var(--space-md);
+    font-size: var(--text-small);
+  }
+  .company-check-body strong {
+    color: var(--color-brand);
+  }
+  .company-check-actions {
+    display: flex;
+    flex: 0 0 auto;
+    justify-content: flex-end;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-lg);
+    border-top: var(--border-thin) solid var(--color-panel-border);
+    background: var(--color-footer);
+  }
+  .company-check-actions .action {
+    flex: 1 1 0;
+    margin: 0;
+    width: auto;
+    padding-inline: var(--space-sm);
+  }
+  :global(html[data-company-check-open]),
+  :global(html[data-company-check-open] body) {
+    overflow: hidden;
   }
   @media (width < theme(--breakpoint-tablet)) {
     .fields-grid {
