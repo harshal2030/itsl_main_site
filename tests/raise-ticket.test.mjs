@@ -52,9 +52,12 @@ test('raise-a-ticket starts disabled with the exact complaint fields', () => {
   assert.equal(attr(form, 'method'), 'post');
   assert.equal(attr(form, 'action'), undefined);
   assert.notEqual(attr(form, 'novalidate'), undefined);
-  assert.notEqual(attr(nodes('fieldset')[0], 'disabled'), undefined);
+  assert.notEqual(
+    attr(all(form, (node) => node.tagName === 'fieldset')[0], 'disabled'),
+    undefined,
+  );
 
-  const controls = all(tree, (node) =>
+  const controls = all(form, (node) =>
     ['input', 'select', 'textarea'].includes(node.tagName),
   );
   assert.deepEqual(
@@ -75,12 +78,14 @@ test('raise-a-ticket starts disabled with the exact complaint fields', () => {
   assert.equal(attr(controls[7], 'required'), undefined);
   for (const control of controls)
     assert.ok(
-      nodes('label').some(
+      all(form, (node) => node.tagName === 'label').some(
         (label) => attr(label, 'for') === attr(control, 'id'),
       ),
     );
 
-  const options = nodes('option').map((option) => attr(option, 'value'));
+  const options = all(form, (node) => node.tagName === 'option').map((option) =>
+    attr(option, 'value'),
+  );
   assert.deepEqual(options, [
     '',
     'Account Opening',

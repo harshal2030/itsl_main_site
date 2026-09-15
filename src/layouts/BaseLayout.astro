@@ -3,6 +3,7 @@ import '../styles/global.css';
 import SEO from '../components/shared/SEO.astro';
 import Header from '../components/shared/Header.astro';
 import Footer from '../components/shared/Footer.astro';
+import AccessibilityToolbar from '../components/shared/AccessibilityToolbar.astro';
 interface Props {
   title: string;
   description: string;
@@ -33,6 +34,44 @@ const { contentPage = false } = Astro.props;
       type="font/woff2"
       crossorigin
     />
+    <script is:inline>
+      (() => {
+        const modes = ['high', 'dark', 'inverted'];
+        try {
+          const raw = localStorage.getItem('a11y-plugin-prefs');
+          if (!raw) return;
+          const preferences = JSON.parse(raw);
+          if (preferences?.version !== 1) return;
+          const fontSize = preferences.fontSize;
+          if (
+            Number.isInteger(fontSize) &&
+            fontSize >= -30 &&
+            fontSize <= 50 &&
+            fontSize % 10 === 0 &&
+            fontSize !== 0
+          )
+            document.documentElement.style.fontSize = `${100 + fontSize}%`;
+          if (modes.includes(preferences.contrast))
+            document.documentElement.setAttribute(
+              'data-a11y-contrast',
+              preferences.contrast,
+            );
+          if (preferences.dyslexicFont === true)
+            document.documentElement.setAttribute('data-a11y-dyslexic', '');
+          const keyboardNav =
+            typeof preferences.keyboardNav === 'boolean'
+              ? preferences.keyboardNav
+              : preferences.active;
+          if (keyboardNav === true)
+            document.documentElement.setAttribute(
+              'data-a11y-keyboard-enabled',
+              '',
+            );
+        } catch {
+          // Invalid or blocked storage must never prevent the page from rendering.
+        }
+      })();
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -45,5 +84,6 @@ const { contentPage = false } = Astro.props;
       <slot />
     </main>
     <Footer />
+    <AccessibilityToolbar />
   </body>
 </html>

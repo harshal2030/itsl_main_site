@@ -175,11 +175,20 @@ state-management library, or new backend integration without approval.
 - Edit navigation and external destinations in `src/data/nav.ts` and `site.ts`.
 - The hamburger menu becomes a full-page panel below the header on phone widths;
   its markup and behavior remain owned by `src/components/shared/Header.astro`.
+- The shared accessibility toolbar is owned by
+  `src/components/shared/AccessibilityToolbar.astro`. It stores only display and
+  reading preferences under `a11y-plugin-prefs`; Reset all settings removes them.
 - Edit layout or page-specific behavior in the named component under `src/components/`.
 - Change typography, spacing, colors, breakpoints, shadows and motion in `tokens.css`.
 - Replace local images under `src/assets/images/` and keep alt text and dimensions accurate.
 - Replace `src/assets/docs/corporate-presentation_.pdf` to update the static presentation.
 - Keep browser validation, timeout, safe-URL, sanitization and no-JavaScript fallbacks intact.
+
+The accessibility toolbar provides text scaling, four contrast modes, a locally
+bundled OpenDyslexic font, browser text-to-speech controls, missing-alt auditing
+and enhanced focus visibility on all interactive routes. The toolbar is hidden
+without JavaScript and does not replace semantic HTML, screen-reader testing or
+the release accessibility review.
 
 The full-resolution account-closing flowchart and its accessible transcript must
 be updated together. About Us timeline artwork and text equivalents must also

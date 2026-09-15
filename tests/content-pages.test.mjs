@@ -238,7 +238,8 @@ for (const [route, title, heading] of [
           url,
         );
       assert.equal(
-        nodes('input').length,
+        all(tree, (node) => attr(node, 'data-contact-form') !== undefined)
+          .length,
         0,
         'About Us does not add a contact form',
       );
@@ -295,7 +296,10 @@ for (const [route, title, heading] of [
 
   test(`${route} keeps contact disabled until the client handler is ready`, () => {
     assert.equal(nodes('form').length, route === '/mutual-funds/' ? 1 : 0);
-    const fields = [...nodes('input'), ...nodes('textarea')];
+    const form = nodes('form')[0];
+    const fields = form
+      ? all(form, (node) => ['input', 'textarea'].includes(node.tagName))
+      : [];
     assert.equal(fields.length, route === '/mutual-funds/' ? 4 : 0);
     for (const field of fields) {
       assert.ok(
@@ -305,7 +309,7 @@ for (const [route, title, heading] of [
       );
       assert.equal(attr(field, 'form'), undefined);
       assert.ok(
-        nodes('label').some(
+        all(form, (node) => node.tagName === 'label').some(
           (label) => attr(label, 'for') === attr(field, 'id'),
         ),
       );
@@ -314,9 +318,12 @@ for (const [route, title, heading] of [
       const submit = nodes('button').find((node) => text(node) === 'Submit');
       assert.equal(attr(submit, 'type'), 'submit');
       assert.notEqual(attr(submit, 'disabled'), undefined);
-      assert.notEqual(attr(nodes('fieldset')[0], 'disabled'), undefined);
-      assert.equal(attr(nodes('form')[0], 'method'), 'post');
-      assert.notEqual(attr(nodes('form')[0], 'novalidate'), undefined);
+      assert.notEqual(
+        attr(all(form, (node) => node.tagName === 'fieldset')[0], 'disabled'),
+        undefined,
+      );
+      assert.equal(attr(form, 'method'), 'post');
+      assert.notEqual(attr(form, 'novalidate'), undefined);
     }
   });
 }

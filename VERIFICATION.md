@@ -1,5 +1,47 @@
 # Website migration verification
 
+## Accessibility toolbar integration — 15 September 2026
+
+The shared layout now renders one locally maintained accessibility toolbar on
+all 17 interactive routes. The 404 and `/investors/` redirect shells remain
+unchanged. The toolbar provides bounded text scaling, four exclusive contrast
+modes, a local OpenDyslexic font, browser text-to-speech controls, missing-alt
+highlighting, enhanced keyboard focus and reset-all behavior. Its panel is
+non-modal, keyboard-contained while open, dismissed by Escape or an outside
+pointer action, and restores trigger focus on keyboard dismissal. It stays
+hidden without JavaScript.
+
+Only the validated `a11y-plugin-prefs` preference object is persisted. Visual
+preferences are restored from guarded storage before paint; the panel starts
+closed after reload or navigation, Reset All removes the entry, and speech is
+cancelled on page exit. Empty `alt=""` remains valid while genuinely missing
+attributes, including on dynamically inserted images, can be highlighted.
+The three non-default contrast modes were compared directly with staging: High
+Contrast uses its 1.5× page and 1.2× image filters with white/black/blue colors,
+Dark Mode uses the same inversion and media-restoration filters, and Inverted
+Colors uses black/yellow/cyan with the same dark control surfaces. The local
+toolbar intentionally keeps readable section labels in Inverted Colors instead
+of reproducing staging's white-on-white label defect.
+
+| Check                     | Result                                                                                  |
+| ------------------------- | --------------------------------------------------------------------------------------- |
+| Formatting                | `npm run format:check` passed.                                                          |
+| Astro/TypeScript          | `npm run check`: 107 files, zero errors, warnings or hints.                             |
+| Static output/build       | `PUBLIC_STRAPI_URL= npm test`: 10/10 test files passed; all nineteen outputs built.     |
+| Toolbar browser coverage  | 10/10 focused mocked Chromium tests passed inside the full production suite.            |
+| Production browser tests  | `npm run test:browser`: 232/232 mocked Chromium tests passed.                           |
+| Development layout/assets | `npm run test:dev`: 37/37 responsive and local-asset checks passed.                     |
+| Frontend static audit     | Strict audit completed with zero findings.                                              |
+| Manual browser review     | Keyboard and visual checks passed at 1280×800 and 320×800, including focus restoration. |
+| Safety                    | No live CMS request, form submission, deployment or external runtime was used.          |
+
+The static test command was run with `PUBLIC_STRAPI_URL` blank because the
+checkout's ignored `.env.local` enables a local CMS while those tests explicitly
+verify the unconfigured fallback. Browser suites use the existing mocked
+`http://strapi.test` boundary. This feature remains an optional visitor aid; it
+does not represent a WCAG certification or completion of the broader release
+accessibility review.
+
 ## Wide-screen header gutters — 12 September 2026
 
 The shared header now uses its own token-owned full-width maximum instead of the
@@ -1096,8 +1138,8 @@ figures, source wording, destinations and reduced-motion behavior are preserved.
 Other intentional differences: semantic heading hierarchy; explicit contact labels and
 preview status; visible carousel controls; no entrance-animation hiding; safer
 tablet/phone reflow; complete regulatory copy on mobile; visible focus states;
-and the deferred accessibility toolbar. Source copy/link anomalies are listed in
-README and are not silently corrected.
+and the locally implemented accessibility toolbar. Source copy/link anomalies are
+listed in README and are not silently corrected.
 
 Generated comparison files are ignored artifacts under `artifacts/reference/`
 and `artifacts/local/`; browser-test screenshots/traces are in `test-results/`.
@@ -1156,7 +1198,8 @@ Follow-up checks:
   indexing activation, redirects or deployment has been configured.
 - The contact client and local endpoint smoke test are implemented as recorded
   above; production contact security/privacy configuration is not included.
-  The floating accessibility toolbar/compliance decision remains deferred.
+- The floating accessibility toolbar is implemented and locally tested. It is an
+  optional visitor aid, not evidence of site-wide accessibility certification.
 - External destination values were checked against source markup; authenticated
   account, payment/transfer, IPO and trading workflows were not exercised.
 - Automated browser coverage is Chromium. Safari, Firefox, physical touch devices,

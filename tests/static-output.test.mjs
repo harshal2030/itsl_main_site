@@ -265,11 +265,13 @@ test('all services, final statistics, testimonials and regulatory details are re
 
 test('contact starts disabled until its JavaScript submission guard is ready', () => {
   assert.equal(nodes('form').length, 1);
-  assert.equal(attr(nodes('form')[0], 'method'), 'post');
-  assert.notEqual(attr(nodes('form')[0], 'novalidate'), undefined);
-  assert.equal(attr(nodes('form')[0], 'action'), undefined);
-  assert.notEqual(attr(nodes('fieldset')[0], 'disabled'), undefined);
-  const fields = [...nodes('input'), ...nodes('textarea')];
+  const form = nodes('form')[0];
+  const formNodes = (tag) => all(form, (node) => node.tagName === tag);
+  assert.equal(attr(form, 'method'), 'post');
+  assert.notEqual(attr(form, 'novalidate'), undefined);
+  assert.equal(attr(form, 'action'), undefined);
+  assert.notEqual(attr(formNodes('fieldset')[0], 'disabled'), undefined);
+  const fields = [...formNodes('input'), ...formNodes('textarea')];
   assert.equal(fields.length, 4);
   for (const field of fields) {
     assert.ok(
@@ -277,7 +279,9 @@ test('contact starts disabled until its JavaScript submission guard is ready', (
     );
     assert.equal(attr(field, 'form'), undefined);
     assert.ok(
-      nodes('label').some((label) => attr(label, 'for') === attr(field, 'id')),
+      formNodes('label').some(
+        (label) => attr(label, 'for') === attr(field, 'id'),
+      ),
     );
   }
   const submit = nodes('button').find((node) => text(node) === 'Submit');

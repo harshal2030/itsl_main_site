@@ -75,8 +75,12 @@ a breakpoint in the token file updates both utilities and section media queries.
 Brand blue owns actions, section headings, the About band, Investor tab band and footer. Ink provides
 body contrast and the hero’s restrained text gradient. The pale app surface and
 metric icon tiles are secondary roles. White remains the main page
-surface. Dark mode is not part of the source. Forced-colors mode must retain
-readable text and native system controls.
+surface. The accessibility toolbar mirrors staging's three contrast treatments:
+High Contrast boosts contrast with a white/black/blue palette, Dark Mode uses
+the source inversion treatment while restoring media, and Inverted Colors uses
+black/yellow/cyan with dark form controls. The toolbar remains readable instead
+of reproducing staging's inverted-mode heading defect. Forced-colors mode must
+retain readable text and native system controls.
 
 ## Typography
 
@@ -160,6 +164,25 @@ separate rounded, touch-sized geometry.
 Actions have hover and visible keyboard focus states. White-on-blue sections
 use white focus outlines. Unconfigured/no-JavaScript submission remains unavailable
 with nearby explanatory text. Sending and feedback states reflect actual requests.
+
+### Accessibility toolbar
+
+The shared bottom-right accessibility toolbar follows the staging control set
+without importing its runtime. Its 56px blue trigger opens a 340px, internally
+scrolling non-modal panel that fits narrow viewports. The panel owns focus while
+open, closes from its trigger, close button, Escape or an outside press, and
+restores focus for keyboard dismissal. It sits above the header/mobile menu but
+below the Home Investor Alert dialog; outside dismissal prevents those controls
+from overlapping.
+
+Font scaling changes the root rem scale from 70% to 150% without rewriting
+individual component sizes. Contrast, OpenDyslexic, missing-alt highlighting and
+enhanced keyboard focus are root states backed by the accessibility tokens in
+`tokens.css`. Text to speech reads a selection or visible text from `main` through
+the browser speech API and exposes voice, rate, pause/resume and stop controls.
+Only these preferences are stored locally; the panel opens closed and Reset all
+settings removes the stored entry. The toolbar is hidden without JavaScript and
+does not make accessibility or compliance a user opt-in.
 
 ### Buttons and actions
 

@@ -118,7 +118,7 @@ for (const [route, title, robots, canonical] of [
       );
       assert.equal(attr(file, 'accept'), '.pdf,application/pdf');
       assert.equal(attr(file, 'multiple'), undefined);
-      for (const input of nodes('input'))
+      for (const input of applicationInputs)
         assert.ok(
           nodes('label').some(
             (node) => attr(node, 'for') === attr(input, 'id'),
