@@ -10,7 +10,7 @@ The following routes are implemented and linked locally:
 
 `/`, `/about-us/`, `/mutual-funds/`, `/downloads/`, `/careers/`,
 `/careers/job/`, `/close-account/`, `/procedure-of-closing-account/`,
-`/raise-a-ticket/`, `/investors/overview/`,
+`/raise-a-ticket/`, `/privacy-policy/`, `/investors/overview/`,
 `/investors/shareholder-relation/`, `/investors/financial-reports/`,
 `/investors/disclosures-under-regulation-46/`, `/investors/client-relation/`,
 `/investors/corporate-presentation/`, `/blog/`, and `/blog/post/`.
@@ -28,7 +28,7 @@ still points to the owner-approved WordPress staging destinations until their
 production routes are approved.
 
 Production builds emit self-referencing canonicals, indexable robots directives,
-social preview metadata and Organization/WebSite/WebPage JSON-LD on the fifteen
+social preview metadata and Organization/WebSite/WebPage JSON-LD on the sixteen
 stable sitemap routes. The query-ID Blog post and Job Details shells remain
 `noindex, follow`: their browser-only architecture cannot provide record-specific
 initial metadata or HTTP status codes. Set `SITE_INDEXING=false` for every public

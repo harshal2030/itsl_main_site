@@ -328,3 +328,41 @@ for (const route of ['about-us', 'mutual-funds']) {
     await context.close();
   });
 }
+
+test('Privacy Policy preserves its legal copy and responsive reading layout', async ({
+  page,
+}, testInfo) => {
+  for (const width of [1280, 768, 390, 320]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/privacy-policy/');
+    await page.evaluate(() => document.fonts.ready);
+
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      'Privacy Policy',
+    );
+    await expect(page.locator('.privacy-copy p')).toHaveCount(8);
+    await expect(
+      page.getByText(
+        'The personal data of customers and web site visitors is stored indefinitely',
+        { exact: false },
+      ),
+    ).toBeVisible();
+    await expect(
+      page.getByRole('link', { name: /http:\/\/www\.indothai\.co\.in/ }),
+    ).toHaveAttribute('target', '_blank');
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
+    expect(
+      await page
+        .locator('.privacy-copy')
+        .evaluate((copy) => copy.getBoundingClientRect().width <= innerWidth),
+    ).toBe(true);
+    await page.screenshot({
+      path: testInfo.outputPath(`privacy-policy-${width}.png`),
+      fullPage: true,
+    });
+  }
+});

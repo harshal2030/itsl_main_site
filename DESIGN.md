@@ -36,7 +36,7 @@ components:
 ### Creative North Star
 
 Recreate the supplied WordPress Home, About Us, Mutual Funds, Close Account,
-Procedure for Closing an Account, Raise Ticket, Software Downloads, Careers, Blog and Investor pages: graph-paper hero, generous Raleway
+Procedure for Closing an Account, Raise Ticket, Privacy Policy, Software Downloads, Careers, Blog and Investor pages: graph-paper hero, generous Raleway
 headlines, blue investment-service identity, actual office and app imagery,
 clearly presented statistics, and a substantial regulatory footer. This is a migration,
 not a new brand direction. The corresponding staging pages are authoritative; the previous
@@ -98,7 +98,7 @@ Testimonial cards show three, two or one at the token-owned breakpoints. Their
 height follows the longest quote with a modest minimum, not an oversized fixed
 blank area. Keep intrinsic image dimensions.
 
-The main container on all seventeen routes owns the space between sections and before
+The main container on all implemented content routes owns the space between sections and before
 the footer using `--space-section-gap` from `tokens.css`. The owner requested a
 more generous rhythm across all three pages after their migration. This outer-gap
 token is independent of `--space-section`, which retains internal padding in
@@ -137,6 +137,11 @@ the miniature centered divider. The decoration is hidden from assistive technolo
 Both pages remain ordinary readable HTML without animation-dependent
 visibility; do not reproduce the source's broken mobile line heights or timeline
 overlap during entrance animation.
+
+Privacy Policy uses the secondary-page heading scale and a token-owned readable
+legal-copy width. Its supplied wording and external website destination remain
+unchanged; the footer Privacy Policy link routes locally. The page adds no client
+script, form, CMS dependency or decorative treatment.
 
 ## Elevation & Depth
 

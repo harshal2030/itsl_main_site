@@ -1,5 +1,30 @@
 # Website migration verification
 
+## Privacy Policy — 15 September 2026
+
+`/privacy-policy/` is the twentieth static output and the sixteenth stable
+sitemap route. It uses the shared header, footer, content-page typography and
+SEO shell, with one H1 and the owner-supplied Privacy Policy wording. The
+footer's Privacy Policy destination now links locally. The supplied
+`http://www.indothai.co.in` destination remains an external new-window link
+with safe relationship attributes and an accessible new-window notice.
+
+The copy is presented in a token-width reading column that reflows without
+horizontal page overflow. The page introduces no client script, form, CMS
+request, dependency, image or Investor Alert. Its production output is
+indexable and self-canonical and is included in `public/sitemap.xml`.
+
+| Check                     | Result                                                                                        |
+| ------------------------- | --------------------------------------------------------------------------------------------- |
+| Formatting                | `npm run format:check` passed.                                                                |
+| Astro/TypeScript          | `npm run check`: 107 files, zero errors, warnings or hints.                                   |
+| Static output/build       | `npm test`: 54/54 passed; all twenty static outputs built.                                    |
+| Production browser tests  | `npm run test:browser`: 216/216 Chromium tests passed.                                        |
+| Development layout/assets | `npm run test:dev`: 37/37 responsive and local-asset checks passed.                           |
+| Design checks             | Strict frontend audit completed with zero findings; token ownership and `DESIGN.md` reviewed. |
+| Reference and visual      | Staging structure inspected; local 1280px and 320px captures reviewed.                        |
+| Safety                    | No deployment, CMS request, CMS mutation or live submission was performed.                    |
+
 ## Production SEO remediation — 12 September 2026
 
 The post-launch audit found that every live sitemap route returned `noindex,

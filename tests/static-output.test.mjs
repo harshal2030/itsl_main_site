@@ -43,7 +43,7 @@ test('component colors and CSS breakpoints use the canonical design tokens', asy
   }
 });
 
-test('only the nineteen approved routes are generated', async () => {
+test('only the twenty approved routes are generated', async () => {
   assert.deepEqual(
     (await readdir(new URL('../dist/', import.meta.url), { recursive: true }))
       .filter((name) => name.endsWith('.html'))
@@ -66,6 +66,7 @@ test('only the nineteen approved routes are generated', async () => {
       'investors/overview/index.html',
       'investors/shareholder-relation/index.html',
       'mutual-funds/index.html',
+      'privacy-policy/index.html',
       'procedure-of-closing-account/index.html',
       'raise-a-ticket/index.html',
     ],
@@ -186,7 +187,7 @@ test('every sitemap URL is a canonical, indexable static page', async () => {
   const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(
     (match) => match[1],
   );
-  assert.equal(urls.length, 15);
+  assert.equal(urls.length, 16);
   assert.equal(new Set(urls).size, urls.length);
 
   for (const value of urls) {
@@ -324,6 +325,7 @@ test('migrated routes link locally and remaining pages stay on staging', () => {
           '/blog/',
           '/blog/post/',
           '/mutual-funds/',
+          '/privacy-policy/',
           '/downloads/',
           '/careers/',
           '/investors/overview/',
@@ -384,6 +386,9 @@ test('migrated routes link locally and remaining pages stay on staging', () => {
   );
   assert.ok(
     nodes('a').some((node) => attr(node, 'href') === '/raise-a-ticket/'),
+  );
+  assert.ok(
+    nodes('a').some((node) => attr(node, 'href') === '/privacy-policy/'),
   );
 });
 

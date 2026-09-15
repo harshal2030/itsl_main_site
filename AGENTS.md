@@ -6,7 +6,8 @@ The static Astro + TypeScript + Tailwind v4 Home (`/`), About Us (`/about-us/`),
 Mutual Funds (`/mutual-funds/`), Software Downloads (`/downloads/`), Careers
 (`/careers/`), job details (`/careers/job/`), Close Account
 (`/close-account/`), Procedure for Closing an Account
-(`/procedure-of-closing-account/`), Raise Ticket (`/raise-a-ticket/`), Investor
+(`/procedure-of-closing-account/`), Raise Ticket (`/raise-a-ticket/`), Privacy
+Policy (`/privacy-policy/`), Investor
 Overview (`/investors/overview/`) and Shareholder Relation
 (`/investors/shareholder-relation/`) and Financial Reports
 (`/investors/financial-reports/`) and Regulation 46 Disclosures
@@ -45,7 +46,8 @@ Strapi code, schema, permissions, CORS or configuration for this integration.
   (`/mutual-funds/`), Software Downloads (`/downloads/`), Careers (`/careers/`),
   job details (`/careers/job/?id=<documentId>`), Close Account
   (`/close-account/`), Procedure for Closing an Account
-  (`/procedure-of-closing-account/`), Raise Ticket (`/raise-a-ticket/`), Investor
+  (`/procedure-of-closing-account/`), Raise Ticket (`/raise-a-ticket/`), Privacy
+  Policy (`/privacy-policy/`), Investor
   Overview (`/investors/overview/`) and Shareholder Relation
   (`/investors/shareholder-relation/`) and Financial Reports
   (`/investors/financial-reports/`) and Regulation 46 Disclosures
@@ -197,6 +199,10 @@ Strapi code, schema, permissions, CORS or configuration for this integration.
   Image component in `ClosingProcedure.astro`. Preserve its centered responsive
   presentation and matching screen-reader transcript. Do not substitute the
   previous project's small derivative or invented five-step wording.
+- Privacy Policy renders the owner-supplied static legal copy in
+  `PrivacyPolicy.astro`. Keep its footer destination local and preserve the
+  supplied external `http://www.indothai.co.in` link with safe new-window
+  attributes. Do not rewrite its legal wording without owner approval.
 - Preserve all six directors, the 11-event milestone transcript, three values,
   four company links and five gallery images. The timeline uses the original
   responsive SVG artwork plus matching desktop/mobile text equivalents, not inferred
@@ -306,7 +312,7 @@ Strapi code, schema, permissions, CORS or configuration for this integration.
 ## Build, verification, and change discipline
 
 - Use npm and preserve `package-lock.json`. Node is pinned in `.nvmrc`.
-  Build the nineteen approved static outputs into `dist/`, including the Investors
+  Build the twenty approved static outputs into `dist/`, including the Investors
   compatibility redirect and generated 404 redirect. Software, opening,
   Blog and investor records require JavaScript and are absent from initial HTML;
   retain preview noindex and do not claim per-job or per-post server-rendered

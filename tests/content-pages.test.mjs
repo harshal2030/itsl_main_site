@@ -21,6 +21,7 @@ const routes = [
   '/blog/',
   '/blog/post/',
   '/mutual-funds/',
+  '/privacy-policy/',
   '/downloads/',
   '/careers/',
   '/investors/overview/',

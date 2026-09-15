@@ -45,7 +45,7 @@ export const links = {
   mcx: 'https://www.mcxindia.com/home',
   disclaimer: `${staging}/disclaimer/`,
   raDisclaimer: `${staging}/ra-disclaimer/`,
-  privacy: `${staging}/privacy-policy/`,
+  privacy: '/privacy-policy/',
   terms: `${staging}/terms-of-use/`,
   siteMap: `${staging}/site-map/`,
   faq: `${staging}/faqs/`,
